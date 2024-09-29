@@ -1,0 +1,10 @@
+debug/basic_object3d.o
+debug/object3d.o
+debug/axis.o
+debug/tetrahedron.o
+debug/cube.o
+debug/main.o
+debug/glwidget.o
+debug/window.o
+debug/moc_glwidget.o
+debug/moc_window.o
