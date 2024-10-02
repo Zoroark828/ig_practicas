@@ -1,0 +1,12 @@
+release/basic_object3d.o
+release/object3d.o
+release/axis.o
+release/tetrahedron.o
+release/cube.o
+release/main.o
+release/glwidget.o
+release/window.o
+release/file_ply_stl.o
+release/ply_object.o
+release/moc_glwidget.o
+release/moc_window.o
