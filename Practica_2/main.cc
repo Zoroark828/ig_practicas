@@ -6,13 +6,12 @@
  * GPL 3
  */
 
-
 #include <QApplication>
 #include <QMainWindow>
 #include <QSurfaceFormat>
 #include "window.h"
 
-
+#include <iostream>
 /*****************************************************************************//**
  *
  *
@@ -27,6 +26,8 @@ int main( int argc, char ** argv )
   Format.setDepthBufferSize(24);
   Format.setStencilBufferSize(8);
   QSurfaceFormat::setDefaultFormat(Format);
+
+  std::cout << QCoreApplication::applicationDirPath().toStdString() << std::endl;
 
   _window Window;
   Window.show();

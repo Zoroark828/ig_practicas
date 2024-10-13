@@ -14,6 +14,7 @@
 #include <QWindow>
 #include <QOpenGLWidget>
 #include <QKeyEvent>
+#include <filesystem>
 #include <iostream>
 #include "vertex.h"
 #include "colors.h"
@@ -75,6 +76,7 @@ private:
   _tetrahedron Tetrahedron;
   _cube Cube;
   _ply_object PlyObject;
+
 
 
   _gl_widget_ne::_object Object;

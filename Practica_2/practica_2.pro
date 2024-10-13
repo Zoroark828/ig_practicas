@@ -10,7 +10,9 @@ HEADERS += \
   glwidget.h \
   window.h \
   file_ply_stl.h \
-  ply_object.h
+  ply_object.h \
+  axis_revolution.h
+  #cone.h
 
 SOURCES += \
   basic_object3d.cc \
@@ -22,10 +24,12 @@ SOURCES += \
   glwidget.cc \
   window.cc \
   file_ply_stl.cc \
-  ply_object.cc
+  ply_object.cc \
+  axis_revolution.cc
+  #cone.cc
 
 
-INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_1\
+INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_2\
 
 LIBS += -lopengl32
 
