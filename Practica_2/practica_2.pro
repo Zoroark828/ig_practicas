@@ -11,8 +11,10 @@ HEADERS += \
   window.h \
   file_ply_stl.h \
   ply_object.h \
-  axis_revolution.h
-  #cone.h
+  axis_revolution.h \
+  cone.h \
+  cylinder.h \
+  sphere.h
 
 SOURCES += \
   basic_object3d.cc \
@@ -25,8 +27,10 @@ SOURCES += \
   window.cc \
   file_ply_stl.cc \
   ply_object.cc \
-  axis_revolution.cc
-  #cone.cc
+  axis_revolution.cc \
+  cone.cc \
+  cylinder.cc \
+  sphere.cc
 
 
 INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_2\

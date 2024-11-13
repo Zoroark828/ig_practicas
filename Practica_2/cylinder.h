@@ -1,6 +1,6 @@
 
-#ifndef CONE_H
-#define CONE_H
+#ifndef CYLINDER_H
+#define CYLINDER_H
 
 #include "axis_revolution.h"
 
@@ -11,10 +11,10 @@
  *
  *****************************************************************************/
 
-class _cone:public _axis_revolution
+class _cylinder:public _axis_revolution
 {
 public:
-  _cone(int num_rotaciones=30);
+  _cylinder(int num_rotaciones=30);
 };
 
 #endif

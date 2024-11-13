@@ -9,5 +9,8 @@ debug/window.o
 debug/file_ply_stl.o
 debug/ply_object.o
 debug/axis_revolution.o
+debug/cone.o
+debug/cylinder.o
+debug/sphere.o
 debug/moc_glwidget.o
 debug/moc_window.o

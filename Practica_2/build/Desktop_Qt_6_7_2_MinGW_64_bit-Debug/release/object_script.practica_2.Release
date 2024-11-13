@@ -9,5 +9,8 @@ release/window.o
 release/file_ply_stl.o
 release/ply_object.o
 release/axis_revolution.o
+release/cone.o
+release/cylinder.o
+release/sphere.o
 release/moc_glwidget.o
 release/moc_window.o
