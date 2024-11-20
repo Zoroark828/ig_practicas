@@ -11,11 +11,11 @@
 _sphere::_sphere(int num_rotaciones)
 {
     // Creamos el perfil de la esfera. Será una circunferencia. Utilizo una función auxiliar, para organizarlo mejor
-    createSphereProfile(41);    // Quiero que el perfil tenga 10 vértices, para que sea más realista
+    createSphereProfile(10);
 
     num_rotaciones =40;
     // Hago el barrido circular de dicho perfil
-    circularSweeping(num_rotaciones);
+    circularSweepingNoOptim(num_rotaciones);
 }
 
 void _sphere::createSphereProfile(int num_vertices){
@@ -47,8 +47,6 @@ void _sphere::createSphereProfile(int num_vertices){
         Perfil[i].z = 0;
     }
 }
-
-
 
 
 

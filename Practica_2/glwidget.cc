@@ -242,6 +242,7 @@ void _gl_widget::initializeGL()
 
   glClearColor(1.0,1.0,1.0,1.0);
   glEnable(GL_DEPTH_TEST);;
+  //glEnable(GL_CULL_FACE);
 
   Observer_angle_x=0;
   Observer_angle_y=0;
