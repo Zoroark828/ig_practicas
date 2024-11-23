@@ -7,9 +7,11 @@
  *
  *
  *****************************************************************************/
+_ply_object::_ply_object(string file_name){
+    readPlyFile(file_name);
+}
 
-_ply_object::_ply_object(string file_name)
-{
+void _ply_object::readPlyFile(string file_name){
     _file_ply LectorPLY;
     if (LectorPLY.open(file_name)){
         // Leo las coordenadas y posiciones (triángulos) del archivo

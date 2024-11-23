@@ -16,14 +16,8 @@ _cylinder::_cylinder(int num_rotaciones)
     Perfil[1]=_vertex3f(0,-0.5,0);                       // Vertice abajo izq
     Perfil[2]=_vertex3f(0.5,-0.5,0);                     // Vertice abajo derecha
     Perfil[3]=_vertex3f(0.5,0.5,0);                     // Vertice arriba derecha
-/*
-    Perfil.resize(4);
-    Perfil[0]=_vertex3f(0,-0.5,0);                       // Vertice abajo izq
-    Perfil[1]=_vertex3f(0.5,-0.5,0);                     // Vertice abajo derecha
-    Perfil[2]=_vertex3f(0.5,0.5,0);                     // Vertice arriba derecha
-    Perfil[3]=_vertex3f(0,0.5,0);                       // Vertice arriba izq
-*/
+
     num_rotaciones = 40;
-    circularSweepingOptim(num_rotaciones);
+    circularSweeping(num_rotaciones);
 }
 

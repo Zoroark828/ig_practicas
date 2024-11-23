@@ -14,7 +14,8 @@ HEADERS += \
   axis_revolution.h \
   cone.h \
   cylinder.h \
-  sphere.h
+  sphere.h \
+  ply_object_revolution.h
 
 SOURCES += \
   basic_object3d.cc \
@@ -30,7 +31,8 @@ SOURCES += \
   axis_revolution.cc \
   cone.cc \
   cylinder.cc \
-  sphere.cc
+  sphere.cc \
+  ply_object_revolution.cc
 
 
 INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_2\

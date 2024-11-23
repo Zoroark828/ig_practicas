@@ -12,5 +12,6 @@ release/axis_revolution.o
 release/cone.o
 release/cylinder.o
 release/sphere.o
+release/ply_object_revolution.o
 release/moc_glwidget.o
 release/moc_window.o

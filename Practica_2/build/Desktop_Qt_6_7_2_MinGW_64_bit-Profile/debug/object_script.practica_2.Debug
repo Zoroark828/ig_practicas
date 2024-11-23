@@ -12,5 +12,6 @@ debug/axis_revolution.o
 debug/cone.o
 debug/cylinder.o
 debug/sphere.o
+debug/ply_object_revolution.o
 debug/moc_glwidget.o
 debug/moc_window.o

@@ -15,7 +15,8 @@
 class _ply_object:public _object3D
 {
 public:
-  _ply_object(string File = QCoreApplication::applicationDirPath().toStdString() + "/../../../ply_models/beethoven.ply");
+    _ply_object(string File = QCoreApplication::applicationDirPath().toStdString() + "/../../../ply_models/beethoven.ply");
+    void readPlyFile(string file_name);
 
 };
 
