@@ -85,7 +85,7 @@ private:
   _cylinder Cylinder;
   _sphere Sphere;
   _car Coche;
-  _rosca Sacacorchos;
+  _anillo Sacacorchos;
 
 
   _gl_widget_ne::_object Object;
