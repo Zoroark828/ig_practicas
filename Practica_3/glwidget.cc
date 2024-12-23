@@ -40,45 +40,43 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
 void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
 {
   switch(Keyevent->key()){
-      case Qt::Key_1:Object=OBJECT_TETRAHEDRON;break;
-      case Qt::Key_2:Object=_gl_widget_ne::OBJECT_CUBE;break;
-      case Qt::Key_3:Object=_gl_widget_ne::OBJECT_CONE;break;
-      case Qt::Key_4:Object=_gl_widget_ne::OBJECT_CYLINDER;break;
-      case Qt::Key_5:Object=_gl_widget_ne::OBJECT_SPHERE;break;
-      case Qt::Key_6:Object=_gl_widget_ne::OBJECT_PLY;break;
-      case Qt::Key_7:Object=_gl_widget_ne::OBJECT_SACACORCHOS;break;
-      case Qt::Key_8:Object=_gl_widget_ne::OBJECT_AUX;break;
+        case Qt::Key_1:Object=OBJECT_TETRAHEDRON;break;
+        case Qt::Key_2:Object=_gl_widget_ne::OBJECT_CUBE;break;
+        case Qt::Key_3:Object=_gl_widget_ne::OBJECT_CONE;break;
+        case Qt::Key_4:Object=_gl_widget_ne::OBJECT_CYLINDER;break;
+        case Qt::Key_5:Object=_gl_widget_ne::OBJECT_SPHERE;break;
+        case Qt::Key_6:Object=_gl_widget_ne::OBJECT_PLY;break;
+        case Qt::Key_7:Object=_gl_widget_ne::OBJECT_SACACORCHOS;break;
+        case Qt::Key_8:Object=_gl_widget_ne::OBJECT_AUX;break;
 
-      case Qt::Key_P:Draw_point=!Draw_point;break;
-      case Qt::Key_L:Draw_line=!Draw_line;break;
-      case Qt::Key_F:Draw_fill=!Draw_fill;break;
-      case Qt::Key_C:Draw_chess=!Draw_chess;break;
+        case Qt::Key_P:Draw_point=!Draw_point;break;
+        case Qt::Key_L:Draw_line=!Draw_line;break;
+        case Qt::Key_F:Draw_fill=!Draw_fill;break;
+        case Qt::Key_C:Draw_chess=!Draw_chess;break;
 
-      case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
-      case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
-      case Qt::Key_Up:Observer_angle_x-=ANGLE_STEP;break;
-      case Qt::Key_Down:Observer_angle_x+=ANGLE_STEP;break;
-      case Qt::Key_N:Observer_distance*=1.2;break;
-      case Qt::Key_M:Observer_distance/=1.2;break;
+        case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
+        case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
+        case Qt::Key_Up:Observer_angle_x-=ANGLE_STEP;break;
+        case Qt::Key_Down:Observer_angle_x+=ANGLE_STEP;break;
+        case Qt::Key_N:Observer_distance*=1.2;break;
+        case Qt::Key_M:Observer_distance/=1.2;break;
 
-      // Teclas para controlar los grados de libertad del sacacorchos + animacion
-      /*
-    case Qt::Key_W:superior.increase();break;
-  case Qt::Key_Q:superior.decrease();break;
-  case Qt::Key_D:canion.increase();break;
-  case Qt::Key_S:canion.decrease();break;
-  case Qt::Key_X:mecanismo.increase();break;
-  case Qt::Key_Z:mecanismo.decrease();break;
-  //case Qt::Key_A:if(timer->isActive()) timer->stop();else timer->start(16);break;
+        // Teclas para controlar los grados de libertad del sacacorchos + animacion
 
-  case Qt::Key_R:superior.increaseStep();break;
-  case Qt::Key_E:superior.decreaseStep();break;
-  case Qt::Key_Y:canion.increaseStep();break;
-  case Qt::Key_T:canion.decreaseStep();break;
-  case Qt::Key_I:mecanismo.increaseStep();break;
-  case Qt::Key_U:mecanismo.decreaseStep();break;
-        */
+        case Qt::Key_Q:Sacacorchos->increase_first_degree();break;
+        case Qt::Key_W:Sacacorchos->decrease_first_degree();break;
+        case Qt::Key_S:Sacacorchos->increase_second_degree();break;
+        case Qt::Key_D:Sacacorchos->decrease_second_degree();break;
+        case Qt::Key_Z:Sacacorchos->increase_third_degree();break;
+        case Qt::Key_X:Sacacorchos->decrease_third_degree();break;
+        //case Qt::Key_A:if(timer->isActive()) timer->stop();else timer->start(16);break;
 
+        case Qt::Key_E:Sacacorchos->increase_rate_first_degree();break;
+        case Qt::Key_R:Sacacorchos->decrease_rate_first_degree();break;
+        case Qt::Key_T:Sacacorchos->increase_rate_second_degree();break;
+        case Qt::Key_Y:Sacacorchos->decrease_rate_second_degree();break;
+        case Qt::Key_U:Sacacorchos->increase_rate_third_degree();break;
+        case Qt::Key_I:Sacacorchos->decrease_rate_third_degree();break;
 
   }
 

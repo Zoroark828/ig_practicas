@@ -75,8 +75,7 @@ public:
     void draw_fill();
     void draw_chess();
 
-    void increase_first_degree(float d);
-    void decrease_first_degree(float d);
+    void modify_first_degree(float d);
 };
 
 class _campana {
@@ -101,12 +100,12 @@ public:
     void draw_fill();
     void draw_chess();
 
-    void increase_first_degree(float d);
-    void decrease_first_degree(float d);
+    void modify_first_degree(float d);
 };
 
 class _sacacorchos{
-    const float MAX_FIRST_D = 10, MAX_SECOND_D = 10, MAX_THIRD_D = 10;
+    const float MAX_FIRST_D = 90, MAX_THIRD_D = 1.5;
+    const float MIN_FIRST_D = 10, MIN_THIRD_D = -0.2;
     float first_d, second_d, third_d;   // valor de cada grado de libertad
     float first_d_rate, second_d_rate, third_d_rate;   // Valor sumado a los grados de libertad
 

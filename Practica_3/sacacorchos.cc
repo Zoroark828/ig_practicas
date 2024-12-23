@@ -48,12 +48,12 @@ _estructura::_estructura(float f_d, _cube &Cube, _cone &Cone, _cylinder &Cylinde
 
 _sacacorchos::_sacacorchos(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring, _spiral &Spiral){
     // Inicializo los valores relacionados con los grados de libertad
-    first_d = 45;
+    first_d = MIN_FIRST_D;
     second_d = 1;
-    third_d = 1;
+    third_d = MAX_THIRD_D;
     first_d_rate = 1;
-    second_d_rate = 1;
-    third_d_rate = 1;
+    second_d_rate = -1;
+    third_d_rate = -0.1;
 
     // Creo sus dos subpartes
     Estructura = new _estructura(first_d, Cube, Cone, Cylinder, Ring);
@@ -73,24 +73,38 @@ _sacacorchos::_sacacorchos(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _recta
 
 
 void _sacacorchos::increase_first_degree(){
-    first_d += first_d_rate;
+    float sum = first_d + first_d_rate;
 
-    Estructura->increase_first_degree(first_d);
+    if (sum < MAX_FIRST_D)
+        first_d = sum;
+    else
+        first_d = MAX_FIRST_D;
 
+    Estructura->modify_first_degree(first_d);
 }
 
 void _sacacorchos::increase_second_degree(){
-    second_d += second_d_rate;
+    second_d += second_d_rate;  // No tiene ni minimo ni maximo
 }
 
 void _sacacorchos::increase_third_degree(){
-    third_d += third_d_rate;
+    float sum = third_d + third_d_rate;
+
+    if (sum > MIN_THIRD_D)
+        third_d = sum;
+    else
+        third_d = MIN_THIRD_D;
 }
 
 void _sacacorchos::decrease_first_degree(){
-    first_d -= first_d_rate;
+    float res = first_d - first_d_rate;
 
-    Estructura->decrease_first_degree(first_d);
+    if (res > MIN_FIRST_D)
+        first_d = res;
+    else
+        first_d = MIN_FIRST_D;
+
+    Estructura->modify_first_degree(first_d);
 }
 
 void _sacacorchos::decrease_second_degree(){
@@ -98,53 +112,51 @@ void _sacacorchos::decrease_second_degree(){
 }
 
 void _sacacorchos::decrease_third_degree(){
-    third_d -= third_d_rate;
+    float res = third_d - third_d_rate;
+
+    if (res < MAX_THIRD_D)
+        third_d = res;
+    else
+        third_d = MAX_THIRD_D;
 }
 
 
 
 // Funciones para cambiar la cantidad que se modifica al incrementar/decrementar los grados de libertad
 void _sacacorchos::increase_rate_first_degree(){
-    first_d_rate+=1;
+    first_d_rate+=1;    // grados
 }
 
 void _sacacorchos::increase_rate_second_degree(){
-    second_d_rate+=1;
+    second_d_rate-=1;   // grados
 }
 
 void _sacacorchos::increase_rate_third_degree(){
-    third_d_rate+=1;
+    third_d_rate-=0.1;    // unidades
 }
 
 void _sacacorchos::decrease_rate_first_degree(){
-    first_d_rate-=1;
+    first_d_rate-=0.1;
 }
 
 void _sacacorchos::decrease_rate_second_degree(){
-    second_d_rate-=1;
+    second_d_rate+=1;
 }
 
 void _sacacorchos::decrease_rate_third_degree(){
-    third_d_rate-=1;
+    third_d_rate+=1;
 }
 
 
 
 
-void _estructura::increase_first_degree(float d){
-    Soporte->increase_first_degree(d);
+void _estructura::modify_first_degree(float d){
+    Soporte->modify_first_degree(d);
 }
 
-void _estructura::decrease_first_degree(float d){
-    Soporte->decrease_first_degree(d);
-}
 
-void _soporte::increase_first_degree(float d){
-    first_d += d;
-}
-
-void _soporte::decrease_first_degree(float d){
-    first_d -= d;
+void _soporte::modify_first_degree(float d){
+    first_d = d;
 }
 
 
@@ -739,6 +751,8 @@ void _sacacorchos::draw_point(){
     glPopMatrix();
 
     glPushMatrix();
+    glTranslatef(0,third_d,0);
+    glRotatef(second_d,0,1,0);
     glTranslatef(0,3,0);
     Agarre->draw_point();
     glPopMatrix();
@@ -753,6 +767,8 @@ void _sacacorchos::draw_line(){
     glPopMatrix();
 
     glPushMatrix();
+    glTranslatef(0,third_d,0);
+    glRotatef(second_d,0,1,0);
     glTranslatef(0,3,0);
     Agarre->draw_line();
     glPopMatrix();
@@ -765,6 +781,8 @@ void _sacacorchos::draw_fill(){
     glPopMatrix();
 
     glPushMatrix();
+    glTranslatef(0,third_d,0);
+    glRotatef(second_d,0,1,0);
     glTranslatef(0,3,0);
     Agarre->draw_fill();
     glPopMatrix();
@@ -777,6 +795,8 @@ void _sacacorchos::draw_chess(){
     glPopMatrix();
 
     glPushMatrix();
+    glTranslatef(0,third_d,0);
+    glRotatef(second_d,0,1,0);
     glTranslatef(0,3,0);
     Agarre->draw_chess();
     glPopMatrix();
