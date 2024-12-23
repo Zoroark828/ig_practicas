@@ -45,7 +45,6 @@ _cube::_cube(float Size)
 
     Triangles[10]=_vertex3ui(1,2,6);
     Triangles[11]=_vertex3ui(1,5,6);
-
-
 }
+
 

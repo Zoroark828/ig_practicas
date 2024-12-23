@@ -13,6 +13,8 @@
 
 class _spiral:public _ply_object
 {
+    float normalizacionXZ, normalizacionY;
+
 public:
     _spiral(string File = QCoreApplication::applicationDirPath().toStdString() + "/../../../ply_models/spring.ply");
 

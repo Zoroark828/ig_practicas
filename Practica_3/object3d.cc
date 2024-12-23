@@ -63,7 +63,7 @@ void _object3D::draw_line()
     */
 
     // Tercera forma:
-    glColor3f(0,0,0);
+    glColor3f(0,0,0);   // Negras
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBegin(GL_TRIANGLES);
     for (unsigned int i = 0; i < Triangles.size(); i++){

@@ -17,8 +17,8 @@ _rectangular_ring::_rectangular_ring(int num_rotaciones)
 
     // El interior tiene 2 puntos también
     PerfilInterior.resize(2);
-    PerfilInterior[0]=_vertex3f(0.30,0.5,0);
-    PerfilInterior[1]=_vertex3f(0.30,-0.5,0);
+    PerfilInterior[0]=_vertex3f(0.35,0.5,0);
+    PerfilInterior[1]=_vertex3f(0.35,-0.5,0);
 
     num_rotaciones = 40;
 
@@ -190,12 +190,6 @@ _rectangular_ring::_rectangular_ring(int num_rotaciones)
 
         i+=2;
     }
-
-
-
-
-
-
 
 
     // PARTE INFERIOR
