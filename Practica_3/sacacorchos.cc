@@ -28,7 +28,9 @@ _tornillo::_tornillo(_cone &Cone){
     Cono = &Cone;
 }
 
-_soporte::_soporte(_cube &Cube, _cone &Cone){
+_soporte::_soporte(float f_d, _cube &Cube, _cone &Cone){
+    first_d = f_d;
+
     Cubo = &Cube;
     Palanca = new _palanca(Cube);
     Tornillo = new _tornillo(Cone);
@@ -39,15 +41,123 @@ _campana::_campana(_cylinder &Cylinder, _rectangular_ring &Ring){
     Anillo = &Ring;
 }
 
-_estructura::_estructura(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring){
+_estructura::_estructura(float f_d, _cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring){
     Campana = new _campana(Cylinder, Ring);
-    Soporte = new _soporte(Cube, Cone);
+    Soporte = new _soporte(f_d, Cube, Cone);
 }
 
 _sacacorchos::_sacacorchos(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring, _spiral &Spiral){
-    Estructura = new _estructura(Cube, Cone, Cylinder, Ring);
+    // Inicializo los valores relacionados con los grados de libertad
+    first_d = 45;
+    second_d = 1;
+    third_d = 1;
+    first_d_rate = 1;
+    second_d_rate = 1;
+    third_d_rate = 1;
+
+    // Creo sus dos subpartes
+    Estructura = new _estructura(first_d, Cube, Cone, Cylinder, Ring);
     Agarre = new _agarre(Cylinder, Ring, Spiral);
+
+
 }
+
+
+
+
+
+
+
+
+////////////// FUNCIONES RELACIONADAS CON LOS GRADOS DE LIBERTAD
+
+
+void _sacacorchos::increase_first_degree(){
+    first_d += first_d_rate;
+
+    Estructura->increase_first_degree(first_d);
+
+}
+
+void _sacacorchos::increase_second_degree(){
+    second_d += second_d_rate;
+}
+
+void _sacacorchos::increase_third_degree(){
+    third_d += third_d_rate;
+}
+
+void _sacacorchos::decrease_first_degree(){
+    first_d -= first_d_rate;
+
+    Estructura->decrease_first_degree(first_d);
+}
+
+void _sacacorchos::decrease_second_degree(){
+    second_d -= second_d_rate;
+}
+
+void _sacacorchos::decrease_third_degree(){
+    third_d -= third_d_rate;
+}
+
+
+
+// Funciones para cambiar la cantidad que se modifica al incrementar/decrementar los grados de libertad
+void _sacacorchos::increase_rate_first_degree(){
+    first_d_rate+=1;
+}
+
+void _sacacorchos::increase_rate_second_degree(){
+    second_d_rate+=1;
+}
+
+void _sacacorchos::increase_rate_third_degree(){
+    third_d_rate+=1;
+}
+
+void _sacacorchos::decrease_rate_first_degree(){
+    first_d_rate-=1;
+}
+
+void _sacacorchos::decrease_rate_second_degree(){
+    second_d_rate-=1;
+}
+
+void _sacacorchos::decrease_rate_third_degree(){
+    third_d_rate-=1;
+}
+
+
+
+
+void _estructura::increase_first_degree(float d){
+    Soporte->increase_first_degree(d);
+}
+
+void _estructura::decrease_first_degree(float d){
+    Soporte->decrease_first_degree(d);
+}
+
+void _soporte::increase_first_degree(float d){
+    first_d += d;
+}
+
+void _soporte::decrease_first_degree(float d){
+    first_d -= d;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -188,38 +298,40 @@ void _agarre::draw_chess(){
 
 
 // PALANCA
-void _palanca::draw_point(){
+void _palanca::draw_point(float fd){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
+    glRotatef(fd,0,0,1);
     glTranslatef(0,-3,0);
     glScalef(0.75,8,0.5);
     Cubo->draw_point();
     glPopMatrix();
 }
 
-void _palanca::draw_line(int alpha){
+void _palanca::draw_line(float fd){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glRotatef(alpha,0,0,1);
+    glRotatef(fd,0,0,1);
     glTranslatef(0,-3,0);
     glScalef(0.75,8,0.5);
     Cubo->draw_line();
     glPopMatrix();
 }
 
-void _palanca::draw_fill(){
+void _palanca::draw_fill(float fd){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
+    glRotatef(fd,0,0,1);
     glTranslatef(0,-3,0);
     glScalef(0.75,8,0.5);
     Cubo->draw_fill();
     glPopMatrix();
 }
 
-void _palanca::draw_chess(int alpha){
+void _palanca::draw_chess(float fd){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glRotatef(alpha,0,0,1);
+    glRotatef(fd,0,0,1);
     glTranslatef(0,-3,0);
     glScalef(0.75,8,0.5);
     Cubo->draw_chess();
@@ -280,12 +392,12 @@ void _soporte::draw_point(){
     // Palancas izquierda y derecha
     glPushMatrix();
     glTranslatef(-0.75,0,0);
-    Palanca->draw_point();
+    Palanca->draw_point(-first_d);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0.75,0,0);
-    Palanca->draw_point();
+    Palanca->draw_point(first_d);
     glPopMatrix();
 
     // Tornillos izquierdo y derecho
@@ -309,12 +421,12 @@ void _soporte::draw_line(){
 
     glPushMatrix();
     glTranslatef(-0.75,0,0);
-    Palanca->draw_line(-45);
+    Palanca->draw_line(-first_d);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0.75,0,0);
-    Palanca->draw_line(45);
+    Palanca->draw_line(first_d);
     glPopMatrix();
 
     glPushMatrix();
@@ -337,12 +449,12 @@ void _soporte::draw_fill(){
 
     glPushMatrix();
     glTranslatef(-0.75,0,0);
-    Palanca->draw_fill();
+    Palanca->draw_fill(-first_d);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0.75,0,0);
-    Palanca->draw_fill();
+    Palanca->draw_fill(first_d);
     glPopMatrix();
 
     glPushMatrix();
@@ -365,12 +477,12 @@ void _soporte::draw_chess(){
 
     glPushMatrix();
     glTranslatef(-0.75,0,0);
-    Palanca->draw_chess(-45);
+    Palanca->draw_chess(-first_d);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0.75,0,0);
-    Palanca->draw_chess(45);
+    Palanca->draw_chess(first_d);
     glPopMatrix();
 
     glPushMatrix();
@@ -564,50 +676,57 @@ void _campana::draw_chess(){
 
 // ESTRUCTURA
 void _estructura::draw_point(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,1.25,0); // Lo muevo para arriba de forma que su parte baja toque el eje X
+    Soporte->draw_point();
+    glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0,-2.5,0); // Lo coloco debajo del soporte
+    Campana->draw_point();
+    glPopMatrix();
 }
 
 
 void _estructura::draw_line(){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(0,1.25,0); // Lo muevo para arriba de forma que su parte baja toque el eje X
+    glTranslatef(0,1.25,0);
     Soporte->draw_line();
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0,-2.5,0); // Lo coloco debajo del soporte
+    glTranslatef(0,-2.5,0);
     Campana->draw_line();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0,3,0);
-    //Agarre->draw_line();         ///////////////////////////////////////////////////////////
     glPopMatrix();
 }
 
 void _estructura::draw_fill(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,1.25,0);
+    Soporte->draw_fill();
+    glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0,-2.5,0);
+    Campana->draw_fill();
+    glPopMatrix();
 
 }
 
 void _estructura::draw_chess(){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(0,1.25,0); // Lo muevo para arriba de forma que su parte baja toque el eje X
+    glTranslatef(0,1.25,0);
     Soporte->draw_chess();
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0,-2.5,0); // Lo coloco debajo del soporte
+    glTranslatef(0,-2.5,0);
     Campana->draw_chess();
     glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0,3,0);
-    //Agarre->draw_chess();         ///////////////////////////////////////////////////////////
-    glPopMatrix();
-
 }
 
 

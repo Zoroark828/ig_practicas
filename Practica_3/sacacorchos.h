@@ -43,10 +43,13 @@ class _palanca{
     _cube * Cubo;
 public:
     _palanca(_cube &Cube);
-    void draw_point();
-    void draw_line(int alpha);
-    void draw_fill();
-    void draw_chess(int alpha);
+    void draw_point(float fd);
+    void draw_line(float fd);
+    void draw_fill(float fd);
+    void draw_chess(float fd);
+
+    void increase_first_degree(float d);
+    void decrease_first_degree(float d);
 };
 
 class _tornillo {
@@ -60,16 +63,20 @@ public:
 };
 
 class _soporte {
+    float first_d;
     _cube * Cubo;
     _palanca * Palanca;
     _tornillo * Tornillo;
 public:
-    _soporte(_cube &Cube, _cone &Cone);
+    _soporte(float f_d, _cube &Cube, _cone &Cone);
     ~_soporte(){delete Palanca; delete Tornillo;}
     void draw_point();
     void draw_line();
     void draw_fill();
     void draw_chess();
+
+    void increase_first_degree(float d);
+    void decrease_first_degree(float d);
 };
 
 class _campana {
@@ -87,15 +94,22 @@ class _estructura {
     _campana * Campana;
     _soporte * Soporte;
 public:
-    _estructura(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring);
+    _estructura(float f_d, _cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring);
     ~_estructura(){delete Campana; delete Soporte;}
     void draw_point();
     void draw_line();
     void draw_fill();
     void draw_chess();
+
+    void increase_first_degree(float d);
+    void decrease_first_degree(float d);
 };
 
 class _sacacorchos{
+    const float MAX_FIRST_D = 10, MAX_SECOND_D = 10, MAX_THIRD_D = 10;
+    float first_d, second_d, third_d;   // valor de cada grado de libertad
+    float first_d_rate, second_d_rate, third_d_rate;   // Valor sumado a los grados de libertad
+
     _estructura * Estructura;
     _agarre * Agarre;
 public:
@@ -105,6 +119,49 @@ public:
     void draw_line();
     void draw_fill();
     void draw_chess();
+
+    // Funciones para incrementar/decrementar los grados de libertad
+    void increase_first_degree();   // Translacion palas
+    void increase_second_degree();  // Translacion soporte
+    void increase_third_degree();   // Rotacion soporte
+    void decrease_first_degree();
+    void decrease_second_degree();
+    void decrease_third_degree();
+
+    // Funciones para cambiar la cantidad que se modifica al incrementar/decrementar los grados de libertad
+    // Lo aumentan/decrementan de 5 en 5
+    void increase_rate_first_degree();   // Translacion palas
+    void increase_rate_second_degree();  // Translacion soporte
+    void increase_rate_third_degree();   // Rotacion soporte
+    void decrease_rate_first_degree();
+    void decrease_rate_second_degree();
+    void decrease_rate_third_degree();
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
