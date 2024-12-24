@@ -139,6 +139,19 @@ public:
     // Funciones que calculan el valor de un grado dado el valor de otro
     float equivalent_degrees_first(float fd);   // Devuelve el nuevo valor de second
     float equivalent_degrees_third(float td);   // Devuelve el nuevo valor de first
+
+    // Getter necesarios para que la animación sea infinita en _gl_widget
+    float getFirst_D(){
+        return first_d;
+    }
+
+    float getMax_First_D(){
+        return MAX_FIRST_D;
+    }
+
+    float getMin_First_D(){
+        return MIN_FIRST_D;
+    }
 };
 
 #endif

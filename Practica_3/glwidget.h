@@ -29,6 +29,7 @@
 #include "rectangular_ring.h"
 #include "car.h"
 #include "sacacorchos.h"
+#include <QTimer>
 
 
 namespace _gl_widget_ne {
@@ -68,6 +69,9 @@ public:
   void draw_axis();
   void draw_objects();
 
+public slots:   // Necesario para QTimer
+  void animation(); // Funcion encargada de producir la animación
+
 
 protected:
   void resizeGL(int Width1, int Height1) Q_DECL_OVERRIDE;
@@ -91,6 +95,15 @@ private:
   _sacacorchos * Sacacorchos;
 
   _spiral AUX;    ////////// Borra, solo era para conseguir fotos
+
+
+  // Necesarios para la animación
+  QTimer * timer;
+  bool incrementando;
+
+
+
+
 
   _gl_widget_ne::_object Object;
 

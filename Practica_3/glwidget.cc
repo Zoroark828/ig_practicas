@@ -26,7 +26,10 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
   setMinimumSize(300, 300);
   setFocusPolicy(Qt::StrongFocus);
 
-  Sacacorchos = new _sacacorchos(Cube, Cone, Cylinder, Ring, Spiral); ///////////////////////////////////////////////
+  Sacacorchos = new _sacacorchos(Cube, Cone, Cylinder, Ring, Spiral);
+
+  timer = new QTimer(this);
+  connect(timer,SIGNAL(timeout()),this,SLOT(animation()));
 }
 
 
@@ -69,7 +72,7 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         case Qt::Key_D:Sacacorchos->decrease_second_degree();break;
         case Qt::Key_Z:Sacacorchos->increase_third_degree();break;
         case Qt::Key_X:Sacacorchos->decrease_third_degree();break;
-        //case Qt::Key_A:if(timer->isActive()) timer->stop();else timer->start(16);break;
+        case Qt::Key_A:if(timer->isActive()) timer->stop();else timer->start(20);break;
 
         case Qt::Key_E:Sacacorchos->increase_rate_first_degree();break;
         case Qt::Key_R:Sacacorchos->decrease_rate_first_degree();break;
@@ -82,6 +85,28 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
 
   update();
 }
+
+/*****************************************************************************//**
+ * Animación
+ *
+ *
+ *
+ *****************************************************************************/
+
+void _gl_widget::animation(){
+    if (Sacacorchos->getFirst_D() == Sacacorchos->getMax_First_D())
+        incrementando = false;  // Necesito que baje
+    else if (Sacacorchos->getFirst_D() == Sacacorchos->getMin_First_D())
+        incrementando = true;
+
+    if (incrementando)
+        Sacacorchos->increase_first_degree();
+    else
+        Sacacorchos->decrease_first_degree();
+
+    update();
+}
+
 
 
 /*****************************************************************************//**
