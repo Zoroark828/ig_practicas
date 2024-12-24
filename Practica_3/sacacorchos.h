@@ -135,6 +135,10 @@ public:
     void decrease_rate_first_degree();
     void decrease_rate_second_degree();
     void decrease_rate_third_degree();
+
+    // Funciones que calculan el valor de un grado dado el valor de otro
+    float equivalent_degrees_first(float fd);   // Devuelve el nuevo valor de second
+    float equivalent_degrees_third(float td);   // Devuelve el nuevo valor de first
 };
 
 #endif

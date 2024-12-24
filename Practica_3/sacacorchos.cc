@@ -49,11 +49,11 @@ _estructura::_estructura(float f_d, _cube &Cube, _cone &Cone, _cylinder &Cylinde
 _sacacorchos::_sacacorchos(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _rectangular_ring &Ring, _spiral &Spiral){
     // Inicializo los valores relacionados con los grados de libertad
     first_d = MIN_FIRST_D;
-    second_d = 1;
+    second_d = 0;
     third_d = MAX_THIRD_D;
     first_d_rate = 1;
-    second_d_rate = -1;
-    third_d_rate = -0.1;
+    second_d_rate = -5;
+    third_d_rate = -0.05;
 
     // Creo sus dos subpartes
     Estructura = new _estructura(first_d, Cube, Cone, Cylinder, Ring);
@@ -71,7 +71,6 @@ _sacacorchos::_sacacorchos(_cube &Cube, _cone &Cone, _cylinder &Cylinder, _recta
 
 ////////////// FUNCIONES RELACIONADAS CON LOS GRADOS DE LIBERTAD
 
-
 void _sacacorchos::increase_first_degree(){
     float sum = first_d + first_d_rate;
 
@@ -81,10 +80,16 @@ void _sacacorchos::increase_first_degree(){
         first_d = MAX_FIRST_D;
 
     Estructura->modify_first_degree(first_d);
+    // También cambian los otros dos grados de libertad, ya que dependen unos de otros
+    third_d = equivalent_degrees_first(first_d);
+    if (first_d != MAX_FIRST_D) // No dejo que el agarre pueda girar más si las palancas no se pueden mover
+        second_d += second_d_rate;
 }
 
 void _sacacorchos::increase_second_degree(){
-    second_d += second_d_rate;  // No tiene ni minimo ni maximo
+    // En un principio hace lo mismo que la función increase_first_degree, que además se encarga de comprobar que
+    // el agarre no gire más si las otras piezas no se pueden mover
+    increase_first_degree();
 }
 
 void _sacacorchos::increase_third_degree(){
@@ -94,6 +99,13 @@ void _sacacorchos::increase_third_degree(){
         third_d = sum;
     else
         third_d = MIN_THIRD_D;
+
+    // Calculo y modifico el first degree equivalente
+    first_d = equivalent_degrees_third(third_d);
+    Estructura->modify_first_degree(first_d);
+    // Asigno el nuevo second_d (si he podido mover el agarre)
+    if (third_d != MIN_THIRD_D)
+        second_d += second_d_rate;
 }
 
 void _sacacorchos::decrease_first_degree(){
@@ -105,10 +117,14 @@ void _sacacorchos::decrease_first_degree(){
         first_d = MIN_FIRST_D;
 
     Estructura->modify_first_degree(first_d);
+    // También cambian los otros dos grados de libertad, ya que dependen unos de otros
+    third_d = equivalent_degrees_first(first_d);
+    if (first_d != MIN_FIRST_D) // No dejo que el agarre pueda girar más si las palancas no se pueden mover
+        second_d -= second_d_rate;
 }
 
 void _sacacorchos::decrease_second_degree(){
-    second_d -= second_d_rate;
+    decrease_first_degree();
 }
 
 void _sacacorchos::decrease_third_degree(){
@@ -118,6 +134,13 @@ void _sacacorchos::decrease_third_degree(){
         third_d = res;
     else
         third_d = MAX_THIRD_D;
+
+    // Calculo y modifico el first degree equivalente
+    first_d = equivalent_degrees_third(third_d);
+    Estructura->modify_first_degree(first_d);
+    // Asigno el nuevo second_d (si he podido mover el agarre)
+    if (third_d != MAX_THIRD_D)
+        second_d -= second_d_rate;
 }
 
 
@@ -148,8 +171,6 @@ void _sacacorchos::decrease_rate_third_degree(){
 }
 
 
-
-
 void _estructura::modify_first_degree(float d){
     Soporte->modify_first_degree(d);
 }
@@ -161,14 +182,42 @@ void _soporte::modify_first_degree(float d){
 
 
 
+// Funciones que devuelven el equivalente de cierto grado, ya que los grados de libertad guardan
+// dependencia entre ellos
+// Por ejemplo, cuando el agarre está en su punto más alto, las palas deben estar en su punto más bajo (y viceversa)
 
+// Devuelve el nuevo valor de second
+float _sacacorchos::equivalent_degrees_first(float fd){
+    float third, aux;
 
+    /* Normalizo el primer grado de libertad a un valor entre un intervalo 0 - 1
+    La ecuación que utilizo es
+                                    x = (x' - MIN) / (MAX - MIN),
+    donde MAX=1, MIN=0, x el valor normalizado y x' su valor no normalizado
+    */
+    aux = (fd - MIN_FIRST_D) / (MAX_FIRST_D - MIN_FIRST_D);
 
+    /* Dicho valor entre 0 y 1 lo convierto al equivalente en el intervalo de posibles valores del tercer grado de libertad
+    Utilizo la misma formula pero despejando el valor x', es decir:
+                                        x' = x * (MAX - MIN) + MIN
+    También tengo que tener en cuenta que MIN = MAX_THIRD_D y MAX = MIN_THIRD_D, porque el agarre debe hacer un movimiento
+    inverso a las palancas (cuando estas suben, el agarre baja, y viceversa)
+    */
+    third = aux * (MIN_THIRD_D - MAX_THIRD_D) + MAX_THIRD_D;
 
+    return third;
+}
 
+// Devuelve el nuevo valor de first
+float _sacacorchos::equivalent_degrees_third(float td){
+    float first, aux;
 
+    // Utilizo el mismo planteamiento que en la anterior función
+    aux = (td - MAX_THIRD_D) / (MIN_THIRD_D - MAX_THIRD_D);
+    first = aux * (MAX_FIRST_D - MIN_FIRST_D) + MIN_FIRST_D;
 
-
+    return first;
+}
 
 
 
