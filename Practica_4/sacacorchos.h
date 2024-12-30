@@ -7,7 +7,6 @@
 #include "cone.h"
 #include "spiral.h"
 #include "rectangular_ring.h"
-#include "ply_object.h"
 
 
 /*****************************************************************************//**
@@ -26,6 +25,9 @@ public:
     void draw_line();
     void draw_fill();
     void draw_chess();
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 };
 
 class _agarre {
@@ -37,6 +39,9 @@ public:
     void draw_line();
     void draw_fill();
     void draw_chess();
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 };
 
 class _palanca{
@@ -50,6 +55,9 @@ public:
 
     void increase_first_degree(float d);
     void decrease_first_degree(float d);
+    // Funciones para poder iluminar el modelo
+    void draw_flat(float fd);
+    void draw_gouraud(float fd);
 };
 
 class _tornillo {
@@ -60,6 +68,9 @@ public:
     void draw_line();
     void draw_fill();
     void draw_chess();
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 };
 
 class _soporte {
@@ -76,6 +87,9 @@ public:
     void draw_chess();
 
     void modify_first_degree(float d);
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 };
 
 class _campana {
@@ -87,6 +101,9 @@ public:
     void draw_line();
     void draw_fill();
     void draw_chess();
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 };
 
 class _estructura {
@@ -101,6 +118,9 @@ public:
     void draw_chess();
 
     void modify_first_degree(float d);
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 };
 
 class _sacacorchos{
@@ -139,6 +159,10 @@ public:
     // Funciones que calculan el valor de un grado dado el valor de otro
     float equivalent_degrees_first(float fd);   // Devuelve el nuevo valor de second
     float equivalent_degrees_third(float td);   // Devuelve el nuevo valor de first
+
+    // Funciones para poder iluminar el modelo
+    void draw_flat();
+    void draw_gouraud();
 
     // Getter necesarios para que la animación sea infinita en _gl_widget
     float getFirst_D(){

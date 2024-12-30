@@ -106,9 +106,6 @@ private:
   bool incrementando;
 
 
-
-
-
   _gl_widget_ne::_object Object;
 
   bool Draw_point;
@@ -124,6 +121,7 @@ private:
   bool FirstLight;
   bool SecondLight;
   int Material; // Entero que valdrá 0, 1 o 2 dependiendo del material elegido
+  int rotacion_luz; // Número de grados que gira la segunda luz
 
   float Observer_angle_x;
   float Observer_angle_y;

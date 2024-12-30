@@ -227,6 +227,7 @@ float _sacacorchos::equivalent_degrees_third(float td){
 
 
 
+
 ////////////// FUNCIONES PARA DIBUJAR CADA PARTE DEl SACACORCHOS
 
 // ROSCA
@@ -293,6 +294,35 @@ void _rosca::draw_chess(){
     glPopMatrix();
 }
 
+void _rosca::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-2.2,0);
+    glScalef(0.55,5,0.55);
+    //Espiral->draw_flat(); // no puedo, no la genera correctamente
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,2.5,0);
+    glScalef(0.6,5,0.6);
+    Cilindro->draw_flat();
+    glPopMatrix();
+}
+
+void _rosca::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-2.2,0);
+    glScalef(0.55,5,0.55);
+    //Espiral->draw_gouraud();  // no puedo
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,2.5,0);
+    glScalef(0.6,5,0.6);
+    Cilindro->draw_gouraud();
+    glPopMatrix();
+}
 
 
 // AGARRE
@@ -356,7 +386,35 @@ void _agarre::draw_chess(){
     glPopMatrix();
 }
 
+void _agarre::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-4.9,0);
+    Rosca->draw_flat();
+    glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0,0.9,0);
+    glRotatef(90,1,0,0);
+    glScalef(2.8,0.8,1.8);
+    Anillo->draw_flat();
+    glPopMatrix();
+}
+
+void _agarre::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-4.9,0);
+    Rosca->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,0.9,0);
+    glRotatef(90,1,0,0);
+    glScalef(2.8,0.8,1.8);
+    Anillo->draw_gouraud();
+    glPopMatrix();
+}
 
 // PALANCA
 void _palanca::draw_point(float fd){
@@ -399,6 +457,25 @@ void _palanca::draw_chess(float fd){
     glPopMatrix();
 }
 
+void _palanca::draw_flat(float fd){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glRotatef(fd,0,0,1);
+    glTranslatef(0,-3,0);
+    glScalef(0.75,8,0.5);
+    Cubo->draw_flat();
+    glPopMatrix();
+}
+
+void _palanca::draw_gouraud(float fd){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glRotatef(fd,0,0,1);
+    glTranslatef(0,-3,0);
+    glScalef(0.75,8,0.5);
+    Cubo->draw_gouraud();
+    glPopMatrix();
+}
 
 
 // TORNILLO
@@ -437,6 +514,25 @@ void _tornillo::draw_chess(){
     Cono->draw_chess();
     glPopMatrix();
 }
+
+void _tornillo::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glRotatef(-90,1,0,0);
+    glScalef(0.5,1.3,0.5);
+    Cono->draw_flat();
+    glPopMatrix();
+}
+
+void _tornillo::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glRotatef(-90,1,0,0);
+    glScalef(0.5,1.3,0.5);
+    Cono->draw_gouraud();
+    glPopMatrix();
+}
+
 
 
 
@@ -557,7 +653,61 @@ void _soporte::draw_chess(){
     glPopMatrix();
 }
 
+void _soporte::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glScalef(3,2.5,1.2);
+    Cubo->draw_flat();
+    glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(-0.75,0,0);
+    Palanca->draw_flat(-first_d);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.75,0,0);
+    Palanca->draw_flat(first_d);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.75,0,0);
+    Tornillo->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.75,0,0);
+    Tornillo->draw_flat();
+    glPopMatrix();
+}
+
+void _soporte::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glScalef(3,2.5,1.2);
+    Cubo->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.75,0,0);
+    Palanca->draw_gouraud(-first_d);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.75,0,0);
+    Palanca->draw_gouraud(first_d);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.75,0,0);
+    Tornillo->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.75,0,0);
+    Tornillo->draw_gouraud();
+    glPopMatrix();
+}
 
 
 // CAMPANA
@@ -733,6 +883,95 @@ void _campana::draw_chess(){
     glPopMatrix();
 }
 
+void _campana::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-1.5,0);
+    glScalef(2.5,0.75,2.5);
+    Anillo->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.55,0.75,0.55);
+    glRotatef(-6,1,0,0);    // Sobre el eje X
+    glRotatef(-5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.55,0.75,0.55);
+    glRotatef(-6,1,0,0);    // Sobre el eje X
+    glRotatef(5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.55,0.75,-0.55);
+    glRotatef(6,1,0,0);    // Sobre el eje X
+    glRotatef(-5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.55,0.75,-0.55);
+    glRotatef(6,1,0,0);    // Sobre el eje X
+    glRotatef(5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_flat();
+    glPopMatrix();
+
+}
+
+void _campana::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-1.5,0);
+    glScalef(2.5,0.75,2.5);
+    Anillo->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.55,0.75,0.55);
+    glRotatef(-6,1,0,0);    // Sobre el eje X
+    glRotatef(-5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.55,0.75,0.55);
+    glRotatef(-6,1,0,0);    // Sobre el eje X
+    glRotatef(5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.55,0.75,-0.55);
+    glRotatef(6,1,0,0);    // Sobre el eje X
+    glRotatef(-5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.55,0.75,-0.55);
+    glRotatef(6,1,0,0);    // Sobre el eje X
+    glRotatef(5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_gouraud();
+    glPopMatrix();
+
+}
+
+
+
+
+
+
 
 
 // ESTRUCTURA
@@ -789,6 +1028,36 @@ void _estructura::draw_chess(){
     Campana->draw_chess();
     glPopMatrix();
 }
+
+void _estructura::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,1.25,0);
+    Soporte->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,-2.5,0);
+    Campana->draw_flat();
+    glPopMatrix();
+
+}
+
+void _estructura::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,1.25,0);
+    Soporte->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,-2.5,0);
+    Campana->draw_gouraud();
+    glPopMatrix();
+}
+
+
+
 
 
 
@@ -850,6 +1119,39 @@ void _sacacorchos::draw_chess(){
     Agarre->draw_chess();
     glPopMatrix();
 }
+
+void _sacacorchos::draw_flat(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    Estructura->draw_flat();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,third_d,0);
+    glRotatef(second_d,0,1,0);
+    glTranslatef(0,3,0);
+    Agarre->draw_flat();
+    glPopMatrix();
+}
+
+void _sacacorchos::draw_gouraud(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    Estructura->draw_gouraud();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,third_d,0);
+    glRotatef(second_d,0,1,0);
+    glTranslatef(0,3,0);
+    Agarre->draw_gouraud();
+    glPopMatrix();
+}
+
+
+
+
+
 
 
 

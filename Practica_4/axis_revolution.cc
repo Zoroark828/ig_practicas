@@ -219,7 +219,7 @@ void _axis_revolution::trianglesGeneration(vector<_vertex3f> & vertices_zona_cen
 
 void _axis_revolution::calculo_normales(){
     calculo_normales_triangulos();
-    //calculo_normales_vertices();
+    calculo_normales_vertices();
 }
 
 void _axis_revolution::calculo_normales_triangulos(){
@@ -230,9 +230,6 @@ void _axis_revolution::calculo_normales_triangulos(){
     // el numero de rotaciones que se han realizado
 
     NormalesTriangulos.resize(Triangles.size());
-
-    cout << "Triangulos: " << Triangles.size() << endl;
-    cout << "num_rot:" << num_rotaciones << endl;
 
     for (int i = 0; i < Triangles.size(); i++){
         A = Vertices[Triangles[i]._1] - Vertices[Triangles[i]._0];
@@ -247,10 +244,6 @@ void _axis_revolution::calculo_normales_triangulos(){
             N.x *= -1;
             N.y *= -1;
             N.z *= -1;
-
-            cout << i << endl;
-            N.show_values();
-            cout << endl;
         }
 
         // También es importante normalizar el vector

@@ -73,6 +73,7 @@ void _object3D::calculo_normales_vertices(){
 
         // Antes de pasar al siguiente vertice tengo que vacíar el vector auxiliar
         normTriangParticip.clear();
+        N = _vertex3f(0,0,0);
     }
 
 }
@@ -156,7 +157,6 @@ void _object3D::draw_chess()
 void _object3D::draw_flat(){
     int vertex0, vertex1, vertex2;
 
-    glColor3fv((GLfloat *) &RED);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
@@ -177,7 +177,26 @@ void _object3D::draw_flat(){
 }
 
 void _object3D::draw_gouraud(){
+    int vertex0, vertex1, vertex2, j = 0;
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    glBegin(GL_TRIANGLES);
+    glShadeModel(GL_SMOOTH);  // Modo de sombreado SMOOTH (GOURAUD)
+    for (unsigned int i = 0; i < Triangles.size(); i++){
+        vertex0 = Triangles[i]._0;
+        vertex1 = Triangles[i]._1;
+        vertex2 = Triangles[i]._2;
+
+        glNormal3fv((GLfloat *) &NormalesVertices[vertex0]);
+        glVertex3fv((GLfloat *) &Vertices[vertex0]);
+        glNormal3fv((GLfloat *) &NormalesVertices[vertex1]);
+        glVertex3fv((GLfloat *) &Vertices[vertex1]);
+        glNormal3fv((GLfloat *) &NormalesVertices[vertex2]);
+        glVertex3fv((GLfloat *) &Vertices[vertex2]);
+        j+=3;
+    }
+    glEnd();
 }
 
 void _object3D::draw_texture_unlit(){
@@ -190,25 +209,6 @@ void _object3D::draw_texture_flat(){
 
 void _object3D::draw_texture_gouraud(){
 
-}
-
-
-void _object3D::draw_normalesTriangles(){
-    //para que pinte la cara de alante y atras
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    //selecciono los triangulos
-    glBegin(GL_LINES);
-    glLineWidth(3);
-    glColor3fv((GLfloat *) &RED);
-    for (unsigned int i=0;i<Triangles.size();++i){
-        //calculo el centro
-        _vertex3f centro = (Vertices[Triangles[i]._0]+Vertices[Triangles[i]._1]+Vertices[Triangles[i]._2])/3.0f;
-        _vertex3f normal = centro + NormalesTriangulos[i]/4.0f;
-        //GUARDA el centro y la normal
-        glVertex3fv((GLfloat *) &centro);
-        glVertex3fv((GLfloat *) &normal);
-    }
-    glEnd();
 }
 
 

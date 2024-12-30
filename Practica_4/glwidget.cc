@@ -37,10 +37,12 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
   Cone.calculo_normales();
   Cylinder.calculo_normales();
   Sphere.calculo_normales();
+  Spiral.calculo_normales();
+  Ring.calculo_normales();
+  PlyObject.calculo_normales();
   //Chessboard.calculo_normales();
 
-
-
+  rotacion_luz = 0; // En un inicio la segunda luz se encuentra en la misma posición en la que se definió
 }
 
 
@@ -128,83 +130,86 @@ void _gl_widget::animation(){
     else
         Sacacorchos->decrease_first_degree();
 
+    // Aumento el número de grados que gira la segunda luz
+    rotacion_luz += 2;
+
     update();
 }
 
 
 /*****************************************************************************//**
- * Funciones para definir las dos luces
+ * Funciones para definir las dos luces y los tres materiales
  *
  *
  *
  *****************************************************************************/
 
 void _gl_widget::primera_luz(){
-    GLfloat LIGHT1_POS[] = {0.0f, 0.0f, 1.0f, 0.0f};
-    //GLfloat LIGHT1_POS[] = {4.0f, 4.0f, 0.0f, 0.0f};    // El ultimo valor indica que está en el infinito
-    GLfloat LIGHT1_DIFFUSE[] = {1.0f, 1.0f, 1.0f, 1.0f};    // RGBA - La a indica la opacidad
-    GLfloat LIGHT1_SPECULAR[] = {1.0f, 1.0f, 1.0f, 1.0f};   // diffuse y specular iguales
-    GLfloat LIGHT1_AMBIENT[] = {1.0f, 1.0f, 1.0f, 0.2f};    // ambient mismo color pero mucho menos opaco
+    GLfloat LIGHT0_POS[] = {-1.0f, 1.0f, 1.0f, 0.0f};    // El ultimo valor indica que está en el infinito
+    GLfloat LIGHT0_COLOR[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-    glLightfv(GL_LIGHT0, GL_POSITION, LIGHT1_POS);
-    //glLightfv(GL_LIGHT1, GL_DIFFUSE, LIGHT1_DIFFUSE);
-    //glLightfv(GL_LIGHT1, GL_SPECULAR, LIGHT1_SPECULAR);
-    //glLightfv(GL_LIGHT1, GL_AMBIENT, LIGHT1_AMBIENT);
+    glLightfv(GL_LIGHT0, GL_POSITION, LIGHT0_POS);
+    // GL_LIGHT0 es una luz blanca ya definida por OpenGL. La dejo como está. En otro caso:
+    //glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT0_COLOR);
+    //glLightfv(GL_LIGHT0, GL_SPECULAR, LIGHT0_COLOR);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT0_COLOR); // no tiene definida la ambiental por defecto
 }
 
 void _gl_widget::segunda_luz(){
-    GLfloat LIGHT2_POS[] = {1.0f, 1.0f, 0.0f, 1.0f};  // El ultimo valor indica que *NO* está en el infinito
-    GLfloat COLOR_LUZ2[] = {1.0f, 0, 1.0f, 1.0f};// javi
-    GLfloat POSICION_LUZ[] = {5.0f, 5.0f, 5.0f, 1.0f}; // javi
+    GLfloat LIGHT1_POS[] = {5.0f, 10.0f, 2.0f, 1.0f};  // El ultimo valor indica que *NO* está en el infinito
+    GLfloat LIGHT1_COLOR[] = {1.0f, 0.0f, 1.0f, 1.0f};   // RGBA (La A indica la opacidad). Este color es magenta (1,0,1)
 
-    glLightfv(GL_LIGHT1, GL_POSITION, POSICION_LUZ);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, COLOR_LUZ2);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, COLOR_LUZ2);
-    //glLightfv(GL_LIGHT2, GL_AMBIENT, COLOR_LUZ2);
+    glLightfv(GL_LIGHT1, GL_POSITION, LIGHT1_POS);
+    // Le pasamos el mismo color a las tres componentes
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, LIGHT1_COLOR);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, LIGHT1_COLOR);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, LIGHT1_COLOR);
 }
-
-
 
 
 
 void _gl_widget::definir_material(){
-    //GLfloat MATERIAL_DIFFUSE[] = {0.8f, 0.8f, 0.8f, 1.0f};
-    //GLfloat MATERIAL_SPECULAR[] = {0.4f, 0.4f, 0.4f, 1.0f};
-    //GLfloat MATERIAL_AMBIENT[] = {0.2f, 0.2f, 0.2f, 0.2f};
-    //GLfloat MATERIAL_SHINIESS = 10.0f;  // Cuanto más pequeño el valor, mayor brillo
+    // El primer material va a ser amarillo y completamente difuso
+    // Al incidir sobre él la luz blanca, se ve amarillo
+    // Al incidir sobre él la luz magenta, se verá rojo.    (1,1,0) unido a (1,0,1) --> (1,0,0)
+    GLfloat MATERIAL_DIFFUSE1[] = {0.5,0.5,0.0};
+    GLfloat MATERIAL_SPECULAR1[] = {0.0,0.0,0.0};   // No quiero componente especular, así que la pongo "negra"
+    GLfloat MATERIAL_AMBIENT1[] = {0.2,0.2,0.0};
 
-     _vertex3f MATERIAL_AMBIENT(0.0,0.05,0.0);
-     _vertex3f MATERIAL_AMBIENT2(0.5,0.5,0.5);
-     _vertex3f MATERIAL_AMBIENT3(0.05,0.0,0.0);
-    //colores del material
-     _vertex3f MATERIAL_DIFFUSE(0.3,0.7,0.7);
-     _vertex3f MATERIAL_DIFFUSE2(1.0,0.0,0.2);
-     _vertex3f MATERIAL_DIFFUSE3(0.1,0.6,1.0);
-     _vertex3f MATERIAL_DIFFUSE4(0.1,1.0,0.1);
-     _vertex3f MATERIAL_SPECULAR(0.1,0.1,0.1);//menos liso
-     _vertex3f MATERIAL_SPECULAR2(0.7,0.7,0.7);//mas liso
-     float MATERIAL_SHINIESS = 128;//menos brillo
-     float MATERIAL_SHINIESS2 = 50;//mas brillo
-     float MATERIAL_SHINIESS3 = 10;
+
+    // El segundo material va a ser igual que el anterior, pero con constante especular también
+    GLfloat MATERIAL_DIFFUSE2[] = {0.7,0.7,0.0};
+    GLfloat MATERIAL_SPECULAR2[] = {0.2,0.2,0.0};
+    GLfloat MATERIAL_AMBIENT2[] = {0.2,0.2,0.0};
+
+
+    // El tercer material va a ser de color cyan, con reflejos especulares
+    // Con la luz blanca, se ve cyan
+    // Con la luz magenta se verá azul.     Cyan (0,1,1) unido a Magenta (1,0,1) --> Azul (1,0,0)
+    GLfloat MATERIAL_DIFFUSE3[] = {0.0,0.7,0.7};
+    GLfloat MATERIAL_SPECULAR3[] = {0.0,0.2,0.2};
+    GLfloat MATERIAL_AMBIENT3[] = {0.0,0.2,0.2};
+
+    float MATERIAL_SHINIESS = 50;
 
     switch(Material){
     case 0:
-        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE, (GLfloat *)&MATERIAL_DIFFUSE);
-        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat *)&MATERIAL_SPECULAR);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&MATERIAL_AMBIENT);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE, MATERIAL_DIFFUSE1);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, MATERIAL_SPECULAR1);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, MATERIAL_AMBIENT1);
         glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, MATERIAL_SHINIESS);
         break;
     case 1:
-        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE, (GLfloat *)&MATERIAL_DIFFUSE2);
-        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat *)&MATERIAL_SPECULAR2);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&MATERIAL_AMBIENT2);
-        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, MATERIAL_SHINIESS2);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE, MATERIAL_DIFFUSE2);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, MATERIAL_SPECULAR2);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, MATERIAL_AMBIENT2);
+        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, MATERIAL_SHINIESS);
         break;
     case 2:
-        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE, (GLfloat *)&MATERIAL_DIFFUSE4);
-        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat *)&MATERIAL_SPECULAR2);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat *)&MATERIAL_AMBIENT3);
-        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, MATERIAL_SHINIESS3);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE, MATERIAL_DIFFUSE3);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, MATERIAL_SPECULAR3);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, MATERIAL_AMBIENT3);
+        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, MATERIAL_SHINIESS);
         break;
     default: break;
     }
@@ -339,8 +344,15 @@ void _gl_widget::draw_objects()
   if (DrawFlat){
       glEnable(GL_LIGHTING);    // Activo la iluminación
 
+      // Primera luz (es estática)
       primera_luz();
+
+      // Segunda luz (debe moverse con la animación (letra A) al rededor del objeto)
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glRotated(rotacion_luz,0,1,0);    // Aumento rotacion_luz en animation() para que solo cambie si la anim. está activada
       segunda_luz();
+      glPopMatrix();
 
       // Activo las dos luces según qué he elegido
       if(FirstLight){
@@ -348,7 +360,6 @@ void _gl_widget::draw_objects()
       }
       else
           glDisable(GL_LIGHT0);
-
 
       if(SecondLight){
           glEnable(GL_LIGHT1);
@@ -365,39 +376,71 @@ void _gl_widget::draw_objects()
       case OBJECT_CONE:Cone.draw_flat();break;
       case OBJECT_CYLINDER:Cylinder.draw_flat();break;
       case OBJECT_SPHERE:Sphere.draw_flat();break;
-      //case OBJECT_PLY:PlyObject.draw_flat();break;
-      //case OBJECT_AUX:AUX.draw_flat();break;
-      //case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
+      case OBJECT_PLY:PlyObject.draw_flat();break;
+      case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
       default:break;
       }
   }
 
   if (DrawGouraud){
+      glEnable(GL_LIGHTING);    // Activo la iluminación
+
+      // Primera luz (es estática)
+      primera_luz();
+
+      // Segunda luz (debe moverse con la animación (letra A) al rededor del objeto)
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glRotated(rotacion_luz,0,1,0);    // Aumento rotacion_luz en animation() para que solo cambie si la anim. está activada
+      segunda_luz();
+      glPopMatrix();
+
+      // Activo las dos luces según qué he elegido
+      if(FirstLight){
+          glEnable(GL_LIGHT0);
+      }
+      else
+          glDisable(GL_LIGHT0);
+
+      if(SecondLight){
+          glEnable(GL_LIGHT1);
+      }
+      else
+          glDisable(GL_LIGHT1);
+
+      // Definimos el material, que depende del que hayamos elegido entre los 3 creados
+      definir_material();
+
       switch (Object){
-      case OBJECT_TETRAHEDRON:Tetrahedron.draw_normalesTriangles();break;
-      case OBJECT_CUBE:Cube.draw_normalesTriangles();break;
-      case OBJECT_CONE:Cone.draw_normalesTriangles();break;
-      case OBJECT_CYLINDER:Cylinder.draw_normalesTriangles();break;
-      case OBJECT_SPHERE:Sphere.draw_normalesTriangles();break;
-      //case OBJECT_PLY:PlyObject.draw_flat();break;
-      //case OBJECT_AUX:AUX.draw_flat();break;
-      //case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
+      case OBJECT_TETRAHEDRON:Tetrahedron.draw_gouraud();break;
+      case OBJECT_CUBE:Cube.draw_gouraud();break;
+      case OBJECT_CONE:Cone.draw_gouraud();break;
+      case OBJECT_CYLINDER:Cylinder.draw_gouraud();break;
+      case OBJECT_SPHERE:Sphere.draw_gouraud();break;
+      case OBJECT_PLY:PlyObject.draw_gouraud();break;
+      case OBJECT_SACACORCHOS:Sacacorchos->draw_gouraud();break;
       default:break;
       }
+  }
+
+  if (DrawTextureUnlit){
+
   }
 
 
 
 
-  /*
-  bool DrawFlat;
-  bool DrawGouraud;
-  bool DrawTextureUnlit;
-  bool DrawTextureFlat;
-  bool DrawTextureGouraud;
-  bool FirstLight;
-  bool SecondLight;
-  int Material;*/
+  if (DrawTextureFlat){
+
+  }
+
+  if (DrawTextureGouraud){
+
+  }
+
+
+
+
 
 
 

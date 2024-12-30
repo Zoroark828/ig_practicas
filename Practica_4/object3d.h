@@ -40,9 +40,6 @@ class _object3D:public _basic_object3D
   void draw_texture_flat();
   void draw_texture_gouraud();
 
-  //////////////////////////////////// BORRA
-  void draw_normalesTriangles();
-
 };
 
 #endif // OBJECT3D_H
