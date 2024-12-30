@@ -17,5 +17,6 @@ debug/car.o
 debug/spiral.o
 debug/rectangular_ring.o
 debug/sacacorchos.o
+debug/chessboard.o
 debug/moc_glwidget.o
 debug/moc_window.o

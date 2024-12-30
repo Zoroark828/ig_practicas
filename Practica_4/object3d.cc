@@ -177,7 +177,7 @@ void _object3D::draw_flat(){
 }
 
 void _object3D::draw_gouraud(){
-    int vertex0, vertex1, vertex2, j = 0;
+    int vertex0, vertex1, vertex2;
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -194,13 +194,30 @@ void _object3D::draw_gouraud(){
         glVertex3fv((GLfloat *) &Vertices[vertex1]);
         glNormal3fv((GLfloat *) &NormalesVertices[vertex2]);
         glVertex3fv((GLfloat *) &Vertices[vertex2]);
-        j+=3;
     }
     glEnd();
 }
 
 void _object3D::draw_texture_unlit(){
+    int vertex0, vertex1, vertex2;
+    glEnable(GL_TEXTURE_2D);
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glBegin(GL_TRIANGLES);
+    for (unsigned int i = 0; i < Triangles.size(); i++){
+        vertex0 = Triangles[i]._0;
+        vertex1 = Triangles[i]._1;
+        vertex2 = Triangles[i]._2;
+
+        glTexCoord2fv((GLfloat *) &CoordenadasTextura[vertex0]);
+        glVertex3fv((GLfloat *) &Vertices[vertex0]);
+        glTexCoord2fv((GLfloat *) &CoordenadasTextura[vertex1]);
+        glVertex3fv((GLfloat *) &Vertices[vertex1]);
+        glTexCoord2fv((GLfloat *) &CoordenadasTextura[vertex2]);
+        glVertex3fv((GLfloat *) &Vertices[vertex2]);
+    }
+    glEnd();
+    glDisable(GL_TEXTURE_2D);   /////////////// deberia hacerse en glwidget
 }
 
 void _object3D::draw_texture_flat(){

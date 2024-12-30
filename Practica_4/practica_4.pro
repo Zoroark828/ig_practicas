@@ -19,7 +19,8 @@ HEADERS += \
   car.h \
   spiral.h \
   rectangular_ring.h \
-  sacacorchos.h
+  sacacorchos.h \
+  chessboard.h
 
 SOURCES += \
   basic_object3d.cc \
@@ -40,7 +41,8 @@ SOURCES += \
   car.cc \
   spiral.cc \
   rectangular_ring.cc \
-  sacacorchos.cc
+  sacacorchos.cc \
+  chessboard.cc
 
 
 INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_4\

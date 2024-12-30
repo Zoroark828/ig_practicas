@@ -24,6 +24,7 @@ class _object3D:public _basic_object3D
   public:
   vector<_vertex3ui> Triangles;
   vector<_vertex3f> NormalesTriangulos, NormalesVertices;
+  vector<_vertex2f> CoordenadasTextura;
 
   void draw_line();
   void draw_fill();

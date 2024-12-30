@@ -17,5 +17,6 @@ release/car.o
 release/spiral.o
 release/rectangular_ring.o
 release/sacacorchos.o
+release/chessboard.o
 release/moc_glwidget.o
 release/moc_window.o

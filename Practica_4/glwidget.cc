@@ -37,14 +37,64 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
   Cone.calculo_normales();
   Cylinder.calculo_normales();
   Sphere.calculo_normales();
-  Spiral.calculo_normales();
-  Ring.calculo_normales();
-  PlyObject.calculo_normales();
-  //Chessboard.calculo_normales();
+  //Spiral.calculo_normales();
+  //Ring.calculo_normales();
+  //PlyObject.calculo_normales();
+  Chessboard.calculo_normales();
 
   rotacion_luz = 0; // En un inicio la segunda luz se encuentra en la misma posición en la que se definió
+
+
 }
 
+/*****************************************************************************//**
+ * Código proporcionado por los profesores
+ *
+ *
+ *
+ *****************************************************************************/
+
+void _gl_widget::initialize_texture(){
+    // Code for reading an image
+    QString File_name(QCoreApplication::applicationDirPath() + "/../../../texturas/ajedrez.jpg");
+    QImage Image;
+    QImageReader Reader(File_name);
+    Reader.setAutoTransform(true);
+    Image = Reader.read();
+    if (Image.isNull()) {
+        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+                                 tr("Cannot load %1.").arg(QDir::toNativeSeparators(File_name)));
+        exit(-1);
+    }
+    Image=Image.mirrored();
+    Image=Image.convertToFormat(QImage::Format_RGB888);
+
+    // Code to control the application of the texture
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+
+    // FUNCIONES QUE PENSABA QUE HABÍA QUE USAR PERO CON LAS QUE NO ME DIBUJA LA TEXTURA
+    // Crea 1 identificador para una textura (lo guardamos en texChessboard)
+    //glGenTextures(1, &texChessboard);
+    // Bind = unir. Vincula la textura con dicho ID (texChessboard) con el contexto actual de OpenGL
+    // Le pasamos GL_TEXTURE_2D porque estabmos trabajando con una textura en 2D
+    //glBindTexture(GL_TEXTURE_2D, texChessboard);
+
+
+    /* Cargo la imágen en la textura creada
+        void glTexImage2D(	GLenum target,    GLint level,    GLint internalformat,    GLsizei width,    GLsizei height,    GLint border,
+                            GLenum format,    GLenum type,    const GLvoid * data);
+
+    level: nosotros utilizamos 0 porque queremos utilizar la textura original sin reducción
+    internalformat: podríamos poner GL_RGB pero el profesor puso 3, que viene a decir que la información se guardará en la GPU
+    utilizando tres componentes por píxel
+    */
+    glTexImage2D(GL_TEXTURE_2D,0,3,Image.width(),Image.height(),0,GL_RGB,GL_UNSIGNED_BYTE,Image.bits());
+}
 
 /*****************************************************************************//**
  * Evento tecla pulsada
@@ -63,7 +113,7 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         case Qt::Key_5:Object=_gl_widget_ne::OBJECT_SPHERE;break;
         case Qt::Key_6:Object=_gl_widget_ne::OBJECT_PLY;break;
         case Qt::Key_7:Object=_gl_widget_ne::OBJECT_SACACORCHOS;break;
-        case Qt::Key_8:Object=_gl_widget_ne::OBJECT_AUX;break;
+        case Qt::Key_8:Object=_gl_widget_ne::OBJECT_CHESSBOARD;break;
 
         case Qt::Key_P:Draw_point=!Draw_point;break;
         case Qt::Key_L:Draw_line=!Draw_line;break;
@@ -291,6 +341,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:PlyObject.draw_point();break;
     case OBJECT_AUX:AUX.draw_point();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_point();break;
+    case OBJECT_CHESSBOARD:Chessboard.draw_point();break;
 
     default:break;
     }
@@ -308,6 +359,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:PlyObject.draw_line();break;
     case OBJECT_AUX:AUX.draw_line();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_line();break;
+    case OBJECT_CHESSBOARD:Chessboard.draw_line();break;
     default:break;
     }
   }
@@ -323,6 +375,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:PlyObject.draw_fill();break;
     case OBJECT_AUX:AUX.draw_fill();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_fill();break;
+    case OBJECT_CHESSBOARD:Chessboard.draw_fill();break;
     default:break;
     }
   }
@@ -337,6 +390,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:PlyObject.draw_chess();break;
     case OBJECT_AUX:AUX.draw_chess();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_chess();break;
+    case OBJECT_CHESSBOARD:Chessboard.draw_chess();break;
     default:break;
     }
   }
@@ -376,8 +430,9 @@ void _gl_widget::draw_objects()
       case OBJECT_CONE:Cone.draw_flat();break;
       case OBJECT_CYLINDER:Cylinder.draw_flat();break;
       case OBJECT_SPHERE:Sphere.draw_flat();break;
-      case OBJECT_PLY:PlyObject.draw_flat();break;
-      case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
+      //case OBJECT_PLY:PlyObject.draw_flat();break;
+      //case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
+      case OBJECT_CHESSBOARD:Chessboard.draw_flat();break;
       default:break;
       }
   }
@@ -417,14 +472,15 @@ void _gl_widget::draw_objects()
       case OBJECT_CONE:Cone.draw_gouraud();break;
       case OBJECT_CYLINDER:Cylinder.draw_gouraud();break;
       case OBJECT_SPHERE:Sphere.draw_gouraud();break;
-      case OBJECT_PLY:PlyObject.draw_gouraud();break;
-      case OBJECT_SACACORCHOS:Sacacorchos->draw_gouraud();break;
+      //case OBJECT_PLY:PlyObject.draw_gouraud();break;
+      //case OBJECT_SACACORCHOS:Sacacorchos->draw_gouraud();break;
+      case OBJECT_CHESSBOARD:Chessboard.draw_gouraud();break;
       default:break;
       }
   }
 
-  if (DrawTextureUnlit){
-
+  if (DrawTextureUnlit && Object == OBJECT_CHESSBOARD){
+      Chessboard.draw_texture_unlit();
   }
 
 
@@ -528,4 +584,7 @@ void _gl_widget::initializeGL()
   FirstLight=false;
   SecondLight=false;
   Material=0;
+
+  initialize_texture();
+
 }

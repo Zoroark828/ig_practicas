@@ -30,6 +30,8 @@
 #include "car.h"
 #include "sacacorchos.h"
 #include <QTimer>
+#include <QImageReader>
+#include "chessboard.h"
 
 
 namespace _gl_widget_ne {
@@ -44,7 +46,7 @@ namespace _gl_widget_ne {
   const float ANGLE_STEP=1;
 
   typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
-  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_PLY,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE, OBJECT_AUX, OBJECT_SACACORCHOS} _object;
+  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_PLY,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE, OBJECT_AUX, OBJECT_SACACORCHOS, OBJECT_CHESSBOARD} _object;
 }
 
 class _window;
@@ -73,6 +75,8 @@ public:
   void segunda_luz();
   void definir_material();
 
+  void initialize_texture();
+
 public slots:   // Necesario para QTimer
   void animation(); // Funcion encargada de producir la animación
 
@@ -97,6 +101,7 @@ private:
   _spiral Spiral;
   _rectangular_ring Ring;
   _sacacorchos * Sacacorchos;
+  _chessboard Chessboard;
 
   _spiral AUX;    ////////// Borra, solo era para conseguir fotos
 
@@ -105,6 +110,9 @@ private:
   QTimer * timer;
   bool incrementando;
 
+  // Necesario para la textura
+  GLuint texChessboard; // Guardará el ID de la textura para el chessboard
+
 
   _gl_widget_ne::_object Object;
 
@@ -112,7 +120,7 @@ private:
   bool Draw_line;
   bool Draw_fill;
   bool Draw_chess;
-  // Nuevos:
+  // Nuevos P4:
   bool DrawFlat;
   bool DrawGouraud;
   bool DrawTextureUnlit;
