@@ -326,8 +326,10 @@ void _gl_widget::change_observer()
 
 void _gl_widget::draw_objects()
 {
-  Axis.draw_line();
+    Axis.draw_line();
     glDisable(GL_LIGHTING); // Desactivo la luz por si después de utilizar un modo de iluminación ya no quiero usarlo
+    glDisable(GL_TEXTURE_2D);   // Igual con las texturas. Las desactivo y quito también la configuración
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);                   // que hace que se ilumine
 
   if (Draw_point){
     glPointSize(5);
@@ -483,24 +485,77 @@ void _gl_widget::draw_objects()
       Chessboard.draw_texture_unlit();
   }
 
+  if (DrawTextureFlat && Object == OBJECT_CHESSBOARD){
+      // Cambio la configuración (texture enviroment) de la textura seleccionando GL_MODULATE
+      // Este modo coje el color de la textura y lo multiplica por el color de la luz
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
+      glEnable(GL_LIGHTING);    // Activo la iluminación
 
+      // Primera luz (es estática)
+      primera_luz();
 
-  if (DrawTextureFlat){
+      // Segunda luz (debe moverse con la animación (letra A) al rededor del objeto)
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glRotated(rotacion_luz,0,1,0);    // Aumento rotacion_luz en animation() para que solo cambie si la anim. está activada
+      segunda_luz();
+      glPopMatrix();
 
+      // Activo las dos luces según qué he elegido
+      if(FirstLight){
+          glEnable(GL_LIGHT0);
+      }
+      else
+          glDisable(GL_LIGHT0);
+
+      if(SecondLight){
+          glEnable(GL_LIGHT1);
+      }
+      else
+          glDisable(GL_LIGHT1);
+
+      // NO DEFINO LOS MATERIALES
+      // Así cojerá los colores de la textura y no la iluminará según los materiales que definí
+      //definir_material();
+
+      Chessboard.draw_texture_flat();
   }
 
-  if (DrawTextureGouraud){
+  if (DrawTextureGouraud && Object == OBJECT_CHESSBOARD){
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
+      glEnable(GL_LIGHTING);    // Activo la iluminación
+
+      // Primera luz (es estática)
+      primera_luz();
+
+      // Segunda luz (debe moverse con la animación (letra A) al rededor del objeto)
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glRotated(rotacion_luz,0,1,0);    // Aumento rotacion_luz en animation() para que solo cambie si la anim. está activada
+      segunda_luz();
+      glPopMatrix();
+
+      // Activo las dos luces según qué he elegido
+      if(FirstLight){
+          glEnable(GL_LIGHT0);
+      }
+      else
+          glDisable(GL_LIGHT0);
+
+      if(SecondLight){
+          glEnable(GL_LIGHT1);
+      }
+      else
+          glDisable(GL_LIGHT1);
+
+      // NO DEFINO LOS MATERIALES
+      // Así cojerá los colores de la textura y no la iluminará según los materiales que definí
+      //definir_material();
+
+      Chessboard.draw_texture_gouraud();
   }
-
-
-
-
-
-
-
-
 }
 
 
