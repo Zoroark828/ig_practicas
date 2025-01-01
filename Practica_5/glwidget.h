@@ -41,7 +41,7 @@ namespace _gl_widget_ne {
   const float Y_MIN=-.1;
   const float Y_MAX=.1;
   const float FRONT_PLANE_PERSPECTIVE=(X_MAX-X_MIN)/2;
-  const float BACK_PLANE_PERSPECTIVE=1000;
+  const float BACK_PLANE_PERSPECTIVE=1000;  // 1000
   const float DEFAULT_DISTANCE=2;
   const float ANGLE_STEP=1;
 
@@ -136,6 +136,15 @@ private:
   bool SecondLight;
   int Material; // Entero que valdrá 0, 1 o 2 dependiendo del material elegido
   int rotacion_luz; // Número de grados que gira la segunda luz
+
+  // Nuevos P5:
+  bool PerspectiveP;    // Si es true, proyección de perspectiva. Si es false, proyección paralela
+  int Mouse_pos_x;  // variables para guardar la posición del ratón
+  int Mouse_pos_y;
+
+
+
+
 
   float Observer_angle_x;
   float Observer_angle_y;

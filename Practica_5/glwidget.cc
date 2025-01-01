@@ -68,7 +68,6 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         case Qt::Key_P:Draw_point=!Draw_point;break;
         case Qt::Key_L:Draw_line=!Draw_line;break;
         case Qt::Key_F:Draw_fill=!Draw_fill;break;
-        case Qt::Key_C:Draw_chess=!Draw_chess;break;
 
         // Nuevos casos Practica 4:
         case Qt::Key_F1:Draw_fill=!Draw_fill;break; // "Solid mode"
@@ -83,6 +82,10 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         case Qt::Key_K:SecondLight=!SecondLight;break;
         case Qt::Key_M:Material=(Material + 1) % 3;break;
         //
+
+        // Nuevos casos Práctica 5:
+        case Qt::Key_C:PerspectiveP=true;break;
+        case Qt::Key_V:PerspectiveP=false;break;
 
         // Teclas para controlar los grados de libertad del sacacorchos + animacion (Practica 3)
         case Qt::Key_Q:Sacacorchos->increase_first_degree();break;
@@ -121,7 +124,38 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
  *
  *****************************************************************************/
 void _gl_widget::mouseMoveEvent(QMouseEvent *Mouseevent){
+    int dif_x, dif_y;
+    //cout << "position(). x = " << Mouseevent->position().x() << "  y = " << Mouseevent->position().y() << endl;
 
+    /*
+    if((evento->buttons() & Qt::RightButton) == Qt::RightButton){
+        Observer_angle_x += (evento->pos().y() - coordenadas_raton.y())*0.2;
+        Observer_angle_y += (evento->pos().x() - coordenadas_raton.x())*0.2;
+        coordenadas_raton = evento->pos();
+    }
+    */
+
+    // Al inicializar el programa (o cambiar el tamaño de la ventana o al soltar el botón del ratón) le pongo a
+    // Mouse_pos_x/y un valor que puedo identificar para actualizar su valor con el actual (al volver a pinchar con el ratón)
+    // y que así no se produzcan giros bruscos
+    if (Mouse_pos_x == this->width() + 100 || Mouse_pos_y == this->height() + 100){
+        Mouse_pos_x = Mouseevent->position().x();
+        Mouse_pos_y = Mouseevent->position().y();
+    }
+
+    // Diferencia entre la posición anterior y la actual
+    dif_x = Mouse_pos_x - Mouseevent->position().x();
+    dif_y = Mouse_pos_y - Mouseevent->position().y();
+
+    // Actualizo el angulo del observador
+    Observer_angle_x += dif_y * (ANGLE_STEP/2); // Necesito un valor más pequeño que el que uso para moverme con las teclas (ANGLE_STEP)
+    Observer_angle_y += dif_x * (ANGLE_STEP/2);
+
+    // Actualizo con los valores actuales del ratón
+    Mouse_pos_x = Mouseevent->position().x();
+    Mouse_pos_y = Mouseevent->position().y();
+
+    update();
 }
 
 
@@ -133,7 +167,6 @@ void _gl_widget::mouseMoveEvent(QMouseEvent *Mouseevent){
  *
  *****************************************************************************/
 void _gl_widget::mousePressEvent(QMouseEvent *Mouseevent){
-
 }
 
 
@@ -146,6 +179,14 @@ void _gl_widget::mousePressEvent(QMouseEvent *Mouseevent){
  *****************************************************************************/
 void _gl_widget::mouseReleaseEvent(QMouseEvent *Mouseevent){
 
+
+
+
+
+
+    // Pongo valores significativos para la posición que guardo del ratón
+    Mouse_pos_x = this->width() + 100;
+    Mouse_pos_y = this->height() + 100;
 }
 
 
@@ -157,9 +198,29 @@ void _gl_widget::mouseReleaseEvent(QMouseEvent *Mouseevent){
  *
  *****************************************************************************/
 void _gl_widget::wheelEvent(QWheelEvent *Wheelevent){
+    /*
+    Wheelevent->angleDelta() devuelve la cantidad relativa que se ha movido la rueda del ratón, con octavos de un grado.
+    Un valor positivo --> la rueda se ha movido hacia delante
+    Un valor negativo --> la rueda se ha movido para atrás
 
+    Wheelevent->angleDelta().y() devuelve la cantidad que se ha movido la rueda vertical (la que tiene cualquier ratón) desde el evento anterior.
+    También existe una componente x que indica lo mismo pero para las ruedas horizontales que algunos ratones pueden tener. Nosotros no
+    lo tendremos en cuenta.
 
+    Además, hay que comprobar que angleDelta no tenga un valor nulo porque en ciertas ocasiones lo podría tener. Es mejor
+    que leas la explicación en la documentación de QT
+    */
 
+    QPoint delta = Wheelevent->angleDelta() / 8;    // Normalmente delta es un multiplo de 120. 120/8 = 15 grados
+
+    if(!delta.isNull()){
+        Observer_distance -= delta.y() * (1/30.0);
+    }
+
+    update();
+
+    //cout << "delta = " << delta.y() << endl;
+    //cout << "observer_distance = " << Observer_distance << endl << endl;
 }
 
 
@@ -250,14 +311,6 @@ void _gl_widget::pick()
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER,defaultFramebufferObject());
     */
 }
-
-
-
-
-
-
-
-
 
 
 /*****************************************************************************//**
@@ -390,9 +443,21 @@ void _gl_widget::change_projection()
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
-  // Front_plane>0  Back_plane>PlanoDelantero)
-  glFrustum(X_MIN,X_MAX,Y_MIN,Y_MAX,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+  // Necesito que, aunque se deforme la ventana, las figuras no se deformen
+  // Calculo la relación de aspecto Y/X. Multiplicaré este valor a las componentes relacionadas con la Y.
+  float relacion_aspecto = this->height()/(this->width() * 1.0);
+
+  if (PerspectiveP){    // PROYECCIÓN DE PERSPECTIVA
+      // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
+      // Front_plane>0  Back_plane>PlanoDelantero)
+      glFrustum(X_MIN,X_MAX,Y_MIN*relacion_aspecto,Y_MAX*relacion_aspecto,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+  }
+  else{                 // PROYECCIÓN PARALELA / ORTHOGONAL PROYECTION
+      // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
+      // Front_plane y Back_plane pueden ser negativos
+      float factor = DEFAULT_DISTANCE * 10;   // En esta proyección los objetos NO se mueven
+      glOrtho(X_MIN*factor,X_MAX*factor,Y_MIN*factor*relacion_aspecto,Y_MAX*factor*relacion_aspecto,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+  }
 }
 
 
@@ -409,7 +474,8 @@ void _gl_widget::change_observer()
   // posicion del observador
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glTranslatef(0,0,-Observer_distance);
+  //if (PerspectiveP)
+      glTranslatef(0,0,-Observer_distance);
   glRotatef(Observer_angle_x,1,0,0);
   glRotatef(Observer_angle_y,0,1,0);
 }
@@ -683,7 +749,10 @@ void _gl_widget::paintGL()
 
 void _gl_widget::resizeGL(int Width1, int Height1)
 {
-  glViewport(0,0,Width1,Height1);
+    glViewport(0,0,Width1,Height1);
+
+    Mouse_pos_x = this->width() + 100;
+    Mouse_pos_y = this->height() + 100;
 }
 
 
@@ -790,5 +859,14 @@ void _gl_widget::initializeGL()
   rotacion_luz = 0; // En un inicio la segunda luz se encuentra en la misma posición en la que se definió
 
   initialize_texture();
+
+  PerspectiveP = true;
+  //setMouseTracking(true);   // para que siempre cuente los movimientos del ratón, no solo cuando pinches sobre la ventana
+  Mouse_pos_x = this->width() + 100;     // valor que he elegido para poder identificar el valor inicial de estas dos variables
+  Mouse_pos_y = this->height() + 100;
+  mult_Parallel = 10 * Observer_distance;   // Multiplicado por 10 queda bastante bien
+
+
+
 
 }
