@@ -16,6 +16,6 @@ _cone::_cone(int n_r)
     Perfil[1]=_vertex3f(0,-0.5,0);              // Abajo izquierda
     Perfil[2]=_vertex3f(0.5,-0.5,0);            // Abajo derecha
 
-    num_rotaciones = 40;
-    circularSweeping(num_rotaciones);
+    num_rotaciones = n_r;
+    circularSweeping(n_r);
 }

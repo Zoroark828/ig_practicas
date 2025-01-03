@@ -13,7 +13,6 @@ release/cone.o
 release/cylinder.o
 release/sphere.o
 release/ply_object_revolution.o
-release/car.o
 release/spiral.o
 release/rectangular_ring.o
 release/sacacorchos.o

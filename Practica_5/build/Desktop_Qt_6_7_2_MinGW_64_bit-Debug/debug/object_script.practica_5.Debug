@@ -13,7 +13,6 @@ debug/cone.o
 debug/cylinder.o
 debug/sphere.o
 debug/ply_object_revolution.o
-debug/car.o
 debug/spiral.o
 debug/rectangular_ring.o
 debug/sacacorchos.o

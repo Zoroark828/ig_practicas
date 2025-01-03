@@ -335,7 +335,7 @@ void _agarre::draw_point(){
 
     glPushMatrix();
     glTranslatef(0,0.9,0);  // Lo pongo sobre el origen
-    glRotatef(90,1.1,0,0);
+    glRotatef(90,1,0,0);
     glScalef(2.8,0.8,1.8);
     Anillo->draw_point();
     glPopMatrix();
@@ -712,39 +712,6 @@ void _soporte::draw_gouraud(){
 
 // CAMPANA
 void _campana::draw_point(){
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glTranslatef(0,-1.5,0);
-    glScalef(2.5,0.75,2.5);
-    Anillo->draw_point();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0,0.75,0.7);
-    glRotatef(-10,1,0,0);
-    glScalef(0.5,4,0.5);
-    Cilindro->draw_point();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-0.55,0.75,-0.55);
-    glRotatef(6,1,0,0);    // Sobre el eje X
-    glRotatef(-5,0,0,1);    // Sobre el eje Z
-    glScalef(0.5,4,0.5);
-    Cilindro->draw_point();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0.55,0.75,-0.55);
-    glRotatef(6,1,0,0);    // Sobre el eje X
-    glRotatef(5,0,0,1);    // Sobre el eje Z
-    glScalef(0.5,4,0.5);
-    Cilindro->draw_point();
-    glPopMatrix();
-}
-
-
-void _campana::draw_line(){
     // Anillo al que se unen los tres cilindros. Se encuentra abajo
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -798,6 +765,48 @@ void _campana::draw_line(){
     Cilindro->draw_fill();
     glPopMatrix();
     */
+}
+
+
+void _campana::draw_line(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0,-1.5,0);
+    glScalef(2.5,0.75,2.5);
+    Anillo->draw_line();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.55,0.75,0.55);
+    glRotatef(-6,1,0,0);    // Sobre el eje X
+    glRotatef(-5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_line();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.55,0.75,0.55);
+    glRotatef(-6,1,0,0);    // Sobre el eje X
+    glRotatef(5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_line();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.55,0.75,-0.55);
+    glRotatef(6,1,0,0);    // Sobre el eje X
+    glRotatef(-5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_line();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.55,0.75,-0.55);
+    glRotatef(6,1,0,0);    // Sobre el eje X
+    glRotatef(5,0,0,1);    // Sobre el eje Z
+    glScalef(0.5,4,0.5);
+    Cilindro->draw_line();
+    glPopMatrix();
 }
 
 void _campana::draw_fill(){
@@ -1060,7 +1069,7 @@ void _estructura::draw_gouraud(){
 
 
 
-
+// SACACORCHOS
 
 void _sacacorchos::draw_point(){
     glMatrixMode(GL_MODELVIEW);

@@ -37,10 +37,12 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
   Cone.calculo_normales();
   Cylinder.calculo_normales();
   Sphere.calculo_normales();
-  //Spiral.calculo_normales();
-  //Ring.calculo_normales();
-  //PlyObject.calculo_normales();
+  Spiral.calculo_normales();
+  Ring.calculo_normales();
+  PlyObject.calculo_normales();
   Chessboard.calculo_normales();
+
+
 }
 
 
@@ -126,14 +128,6 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
 void _gl_widget::mouseMoveEvent(QMouseEvent *Mouseevent){
     int dif_x, dif_y;
     //cout << "position(). x = " << Mouseevent->position().x() << "  y = " << Mouseevent->position().y() << endl;
-
-    /*
-    if((evento->buttons() & Qt::RightButton) == Qt::RightButton){
-        Observer_angle_x += (evento->pos().y() - coordenadas_raton.y())*0.2;
-        Observer_angle_y += (evento->pos().x() - coordenadas_raton.x())*0.2;
-        coordenadas_raton = evento->pos();
-    }
-    */
 
     // Al inicializar el programa (o cambiar el tamaño de la ventana o al soltar el botón del ratón) le pongo a
     // Mouse_pos_x/y un valor que puedo identificar para actualizar su valor con el actual (al volver a pinchar con el ratón)
@@ -240,7 +234,9 @@ void _gl_widget::wheelEvent(QWheelEvent *Wheelevent){
 
 void _gl_widget::pick()
 {
-    /*
+    int Window_width = this->width();
+    int Window_height = this->height();
+
     makeCurrent();
 
     // Frame Buffer Object to do the off-screen rendering
@@ -272,8 +268,6 @@ void _gl_widget::pick()
     // OpenGL will draw to these buffers (only one in this case)
     static const GLenum Draw_buffers[]={GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1,Draw_buffers);
-
-
 
 
     /////////////////////////////////////////////////////
@@ -309,7 +303,7 @@ void _gl_widget::pick()
     glDeleteFramebuffers(1,&FBO);
     // the normal framebuffer takes the control of drawing
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER,defaultFramebufferObject());
-    */
+
 }
 
 
@@ -474,8 +468,7 @@ void _gl_widget::change_observer()
   // posicion del observador
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  //if (PerspectiveP)
-      glTranslatef(0,0,-Observer_distance);
+  glTranslatef(0,0,-Observer_distance);
   glRotatef(Observer_angle_x,1,0,0);
   glRotatef(Observer_angle_y,0,1,0);
 }
@@ -505,7 +498,7 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_point();break;
     case OBJECT_SPHERE:Sphere.draw_point();break;
     case OBJECT_PLY:PlyObject.draw_point();break;
-    case OBJECT_AUX:AUX.draw_point();break;
+    //case OBJECT_AUX:AUX->draw_point();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_point();break;
     case OBJECT_CHESSBOARD:Chessboard.draw_point();break;
 
@@ -523,7 +516,6 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_line();break;
     case OBJECT_SPHERE:Sphere.draw_line();break;
     case OBJECT_PLY:PlyObject.draw_line();break;
-    case OBJECT_AUX:AUX.draw_line();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_line();break;
     case OBJECT_CHESSBOARD:Chessboard.draw_line();break;
     default:break;
@@ -539,7 +531,6 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_fill();break;
     case OBJECT_SPHERE:Sphere.draw_fill();break;
     case OBJECT_PLY:PlyObject.draw_fill();break;
-    case OBJECT_AUX:AUX.draw_fill();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_fill();break;
     case OBJECT_CHESSBOARD:Chessboard.draw_fill();break;
     default:break;
@@ -554,7 +545,6 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_chess();break;
     case OBJECT_SPHERE:Sphere.draw_chess();break;
     case OBJECT_PLY:PlyObject.draw_chess();break;
-    case OBJECT_AUX:AUX.draw_chess();break;
     case OBJECT_SACACORCHOS:Sacacorchos->draw_chess();break;
     case OBJECT_CHESSBOARD:Chessboard.draw_chess();break;
     default:break;
@@ -596,8 +586,8 @@ void _gl_widget::draw_objects()
       case OBJECT_CONE:Cone.draw_flat();break;
       case OBJECT_CYLINDER:Cylinder.draw_flat();break;
       case OBJECT_SPHERE:Sphere.draw_flat();break;
-      //case OBJECT_PLY:PlyObject.draw_flat();break;
-      //case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
+      case OBJECT_PLY:PlyObject.draw_flat();break;
+      case OBJECT_SACACORCHOS:Sacacorchos->draw_flat();break;
       case OBJECT_CHESSBOARD:Chessboard.draw_flat();break;
       default:break;
       }
@@ -638,8 +628,8 @@ void _gl_widget::draw_objects()
       case OBJECT_CONE:Cone.draw_gouraud();break;
       case OBJECT_CYLINDER:Cylinder.draw_gouraud();break;
       case OBJECT_SPHERE:Sphere.draw_gouraud();break;
-      //case OBJECT_PLY:PlyObject.draw_gouraud();break;
-      //case OBJECT_SACACORCHOS:Sacacorchos->draw_gouraud();break;
+      case OBJECT_PLY:PlyObject.draw_gouraud();break;
+      case OBJECT_SACACORCHOS:Sacacorchos->draw_gouraud();break;
       case OBJECT_CHESSBOARD:Chessboard.draw_gouraud();break;
       default:break;
       }
@@ -751,6 +741,7 @@ void _gl_widget::resizeGL(int Width1, int Height1)
 {
     glViewport(0,0,Width1,Height1);
 
+    // Para que no se me descoloque el movimiento de la cámara con el ratón:
     Mouse_pos_x = this->width() + 100;
     Mouse_pos_y = this->height() + 100;
 }
@@ -864,9 +855,19 @@ void _gl_widget::initializeGL()
   //setMouseTracking(true);   // para que siempre cuente los movimientos del ratón, no solo cuando pinches sobre la ventana
   Mouse_pos_x = this->width() + 100;     // valor que he elegido para poder identificar el valor inicial de estas dos variables
   Mouse_pos_y = this->height() + 100;
-  mult_Parallel = 10 * Observer_distance;   // Multiplicado por 10 queda bastante bien
 
+  // INICIALIZACIÓN DE GLEW
+  glewExperimental = GL_TRUE;
+  int err = glewInit();
+  if (GLEW_OK != err){
+      // Problem: glewInit failed, something is seriously wrong.
+      QMessageBox MsgBox(this);
+      MsgBox.setText("Error: There is not OpenGL drivers\n\nPlease, look for the information of your GPU (AMD, INTEL or NVIDIA) and install the drivers");
+      MsgBox.exec();
+      Window->close();
+  }
 
-
+  Selection_position_x = 0;
+  Selection_position_y = 0;
 
 }

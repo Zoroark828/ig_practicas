@@ -16,7 +16,6 @@ HEADERS += \
   cylinder.h \
   sphere.h \
   ply_object_revolution.h \
-  car.h \
   spiral.h \
   rectangular_ring.h \
   sacacorchos.h \
@@ -38,16 +37,15 @@ SOURCES += \
   cylinder.cc \
   sphere.cc \
   ply_object_revolution.cc \
-  car.cc \
   spiral.cc \
   rectangular_ring.cc \
   sacacorchos.cc \
   chessboard.cc
 
 
-INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_5\
+INCLUDEPATH += D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_5\GLEW\INCLUDE
 
-LIBS += -lopengl32
+LIBS += -lopengl32 -L"D:\AA_UNIVERSIDAD\IG\PRACTICAS\Practica_5\GLEW\BIN\RELEASE\X64" -lglew32
 
 
 CONFIG += c++14

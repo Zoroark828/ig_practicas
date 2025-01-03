@@ -52,9 +52,6 @@ public:
     void draw_line(float fd);
     void draw_fill(float fd);
     void draw_chess(float fd);
-
-    void increase_first_degree(float d);
-    void decrease_first_degree(float d);
     // Funciones para poder iluminar el modelo
     void draw_flat(float fd);
     void draw_gouraud(float fd);
@@ -126,7 +123,9 @@ public:
 class _sacacorchos{
     const float MAX_FIRST_D = 90, MAX_THIRD_D = 1.5;
     const float MIN_FIRST_D = 10, MIN_THIRD_D = -0.2;
-    float first_d, second_d, third_d;   // valor de cada grado de libertad
+    float first_d,  // Primer grado de libertad. Rotación palancas
+        second_d,   // Segundo grado de libertad. Rotación agarre
+        third_d;    // Tercer grado de libertad. Traslación agarre
     float first_d_rate, second_d_rate, third_d_rate;   // Valor sumado a los grados de libertad
 
     _estructura * Estructura;
@@ -140,18 +139,17 @@ public:
     void draw_chess();
 
     // Funciones para incrementar/decrementar los grados de libertad
-    void increase_first_degree();   // Translacion palas
-    void increase_second_degree();  // Translacion soporte
-    void increase_third_degree();   // Rotacion soporte
+    void increase_first_degree();   // Rotación palancas
+    void increase_second_degree();  // Rotación agarre
+    void increase_third_degree();   // Traslación agarre
     void decrease_first_degree();
     void decrease_second_degree();
     void decrease_third_degree();
 
     // Funciones para cambiar la cantidad que se modifica al incrementar/decrementar los grados de libertad
-    // Lo aumentan/decrementan de 5 en 5
-    void increase_rate_first_degree();   // Translacion palas
-    void increase_rate_second_degree();  // Translacion soporte
-    void increase_rate_third_degree();   // Rotacion soporte
+    void increase_rate_first_degree();   // Rotación palancas
+    void increase_rate_second_degree();  // Rotación agarre
+    void increase_rate_third_degree();   // Traslación agarre
     void decrease_rate_first_degree();
     void decrease_rate_second_degree();
     void decrease_rate_third_degree();

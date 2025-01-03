@@ -136,9 +136,9 @@ void _object3D::draw_chess()
     for (unsigned int i = 0; i < Triangles.size(); i++){
         // Queremos dibujar usando dos colores distintos...
         if (i%2 == 0)
-            glColor3fv((GLfloat *) &RED);
-        else
             glColor3fv((GLfloat *) &BLUE);
+        else
+            glColor3fv((GLfloat *) &CYAN);
 
         vertex0 = Triangles[i]._0;  //(indices de cada vertice del triángulo)
         vertex1 = Triangles[i]._1;

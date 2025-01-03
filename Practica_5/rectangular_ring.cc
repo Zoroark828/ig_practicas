@@ -20,8 +20,6 @@ _rectangular_ring::_rectangular_ring(int num_rotaciones)
     PerfilInterior[0]=_vertex3f(0.35,0.5,0);
     PerfilInterior[1]=_vertex3f(0.35,-0.5,0);
 
-    num_rotaciones = 40;
-
 
     // VERTICES
     int i, k;
