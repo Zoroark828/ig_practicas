@@ -14,7 +14,7 @@
 class _cone:public _axis_revolution
 {
 public:
-  _cone(int num_rotaciones=30);
+  _cone(float size = 1.0f,int num_rotaciones=30);
 };
 
 #endif

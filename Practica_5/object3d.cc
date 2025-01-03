@@ -90,6 +90,7 @@ void _object3D::draw_line()
 {
     int vertex1, vertex2, vertex0;
 
+    glLineWidth(3);
     glColor3fv((GLfloat *) &BLACK);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBegin(GL_TRIANGLES);

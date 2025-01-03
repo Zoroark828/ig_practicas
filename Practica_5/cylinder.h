@@ -14,7 +14,7 @@
 class _cylinder:public _axis_revolution
 {
 public:
-  _cylinder(int num_rotaciones=30);
+  _cylinder(float size = 1.0f, int num_rotaciones=30);
 };
 
 #endif

@@ -27,9 +27,10 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
   setFocusPolicy(Qt::StrongFocus);
 
   Sacacorchos = new _sacacorchos(Cube, Cone, Cylinder, Ring, Spiral);
+
+  // para la animación:
   timer = new QTimer(this);
   connect(timer,SIGNAL(timeout()),this,SLOT(animation()));
-
 
   // Genero las normales de los objetos
   Tetrahedron.calculo_normales();
@@ -41,8 +42,6 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
   Ring.calculo_normales();
   PlyObject.calculo_normales();
   Chessboard.calculo_normales();
-
-
 }
 
 
@@ -88,6 +87,7 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         // Nuevos casos Práctica 5:
         case Qt::Key_C:PerspectiveP=true;break;
         case Qt::Key_V:PerspectiveP=false;break;
+        //
 
         // Teclas para controlar los grados de libertad del sacacorchos + animacion (Practica 3)
         case Qt::Key_Q:Sacacorchos->increase_first_degree();break;
@@ -161,6 +161,7 @@ void _gl_widget::mouseMoveEvent(QMouseEvent *Mouseevent){
  *
  *****************************************************************************/
 void _gl_widget::mousePressEvent(QMouseEvent *Mouseevent){
+    // No he implementado el pick
 }
 
 
@@ -172,13 +173,9 @@ void _gl_widget::mousePressEvent(QMouseEvent *Mouseevent){
  *
  *****************************************************************************/
 void _gl_widget::mouseReleaseEvent(QMouseEvent *Mouseevent){
+    // No he implementado el pick
 
-
-
-
-
-
-    // Pongo valores significativos para la posición que guardo del ratón
+    // Pongo valores significativos para la posición que guardo del ratón para que mouseEvent no provoque movimientos discontinuos
     Mouse_pos_x = this->width() + 100;
     Mouse_pos_y = this->height() + 100;
 }
@@ -234,6 +231,9 @@ void _gl_widget::wheelEvent(QWheelEvent *Wheelevent){
 
 void _gl_widget::pick()
 {
+    // Al final no he podido implementar pick()
+
+    /*
     int Window_width = this->width();
     int Window_height = this->height();
 
@@ -275,9 +275,6 @@ void _gl_widget::pick()
 
 
 
-
-
-
     // get the pixel
     int Color;
     glReadBuffer(GL_FRONT);
@@ -294,16 +291,12 @@ void _gl_widget::pick()
 
 
 
-
-
-
-
     glDeleteTextures(1,&Color_texture);
     glDeleteTextures(1,&Depth_texture);
     glDeleteFramebuffers(1,&FBO);
     // the normal framebuffer takes the control of drawing
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER,defaultFramebufferObject());
-
+    */
 }
 
 
@@ -316,9 +309,9 @@ void _gl_widget::pick()
 
 void _gl_widget::animation(){
     if (Sacacorchos->getFirst_D() == Sacacorchos->getMax_First_D())
-        incrementando = false;  // Necesito que baje
+        incrementando = false;  // He llegado al maximo; necesito que baje
     else if (Sacacorchos->getFirst_D() == Sacacorchos->getMin_First_D())
-        incrementando = true;
+        incrementando = true;   // He llegado al minimo; necesito que empiece a subir
 
     if (incrementando)
         Sacacorchos->increase_first_degree();
@@ -483,14 +476,15 @@ void _gl_widget::change_observer()
 
 void _gl_widget::draw_objects()
 {
-    Axis.draw_line();
     glDisable(GL_LIGHTING); // Desactivo la luz por si después de utilizar un modo de iluminación ya no quiero usarlo
     glDisable(GL_TEXTURE_2D);   // Igual con las texturas. Las desactivo y quito también la configuración
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);                   // que hace que se ilumine
 
+    Axis.draw_line();
+
   if (Draw_point){
     glPointSize(5);
-    glColor3fv((GLfloat *) &BLACK);
+    glColor3fv((GLfloat *) &BLACK); // Puntos negros de tamaño 5u
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_point();break;
     case OBJECT_CUBE:Cube.draw_point();break;
@@ -507,8 +501,6 @@ void _gl_widget::draw_objects()
   }
 
   if (Draw_line){
-    glLineWidth(3);
-    glColor3fv((GLfloat *) &MAGENTA);
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_line();break;
     case OBJECT_CUBE:Cube.draw_line();break;
@@ -523,7 +515,6 @@ void _gl_widget::draw_objects()
   }
 
   if (Draw_fill){
-    glColor3fv((GLfloat *) &BLUE);
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
     case OBJECT_CUBE:Cube.draw_fill();break;
@@ -635,7 +626,7 @@ void _gl_widget::draw_objects()
       }
   }
 
-  if (DrawTextureUnlit && Object == OBJECT_CHESSBOARD){
+  if (DrawTextureUnlit && Object == OBJECT_CHESSBOARD){ // Solo he implementado las texturas para el chessboard
       Chessboard.draw_texture_unlit();
   }
 
